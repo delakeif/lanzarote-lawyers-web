@@ -1,0 +1,89 @@
+---
+const {
+  label = '',
+  title = '',
+  intro = '',
+  image = '',
+  ctaHref = '',
+  ctaLabel = '',
+} = Astro.props;
+---
+
+<section class="page-hero relative flex min-h-[64vh] items-end overflow-hidden bg-[#06121C] text-white">
+  {image && (
+    <img
+      src={image}
+      alt={title}
+      class="absolute inset-0 h-full w-full object-cover object-center"
+    />
+  )}
+
+  <div class="absolute inset-0 bg-[linear-gradient(115deg,rgba(3,8,13,.94)_0%,rgba(8,28,43,.88)_43%,rgba(33,98,135,.42)_100%)]"></div>
+  <div class="absolute inset-0 bg-gradient-to-b from-[#06121C]/38 via-transparent to-[#06121C]/62"></div>
+
+  <div class="relative z-10 w-full">
+    <div class="container-premium">
+      <div class="page-hero-content pb-14 pt-32 md:pb-16 md:pt-36">
+        {label && (
+          <p class="text-[12px] uppercase tracking-[0.28em] text-brand-200">
+            {label}
+          </p>
+        )}
+
+        <h1 class="page-hero-title mt-5 text-white">
+          {title}
+        </h1>
+
+        {intro && (
+          <p class="mt-7 max-w-3xl text-[17px] leading-relaxed text-white/74 md:text-[19px]">
+            {intro}
+          </p>
+        )}
+
+        {ctaHref && ctaLabel && (
+          <a
+            href={ctaHref}
+            class="mt-9 inline-flex bg-white px-7 py-4 text-[12px] uppercase tracking-[0.2em] text-[#0D2A3E] no-underline transition-all hover:bg-[#DCECF4]"
+          >
+            {ctaLabel}
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .page-hero-content {
+    width: 100%;
+    max-width: 980px;
+    margin-left: 0;
+    text-align: left;
+  }
+
+  .page-hero-title {
+    max-width: 920px;
+    font-size: clamp(3.2rem, 6.4vw, 7rem);
+    line-height: 0.92;
+    letter-spacing: -0.065em;
+  }
+
+  @media (max-width: 767px) {
+    .page-hero {
+      min-height: auto;
+    }
+
+    .page-hero-content {
+      max-width: 100%;
+      padding-top: 9rem;
+      padding-bottom: 4rem;
+    }
+
+    .page-hero-title {
+      max-width: 100%;
+      font-size: clamp(2.8rem, 13vw, 4.4rem);
+      line-height: 0.96;
+      letter-spacing: -0.055em;
+    }
+  }
+</style>

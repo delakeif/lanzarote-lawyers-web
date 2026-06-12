@@ -1,0 +1,152 @@
+---
+import { useTranslations, getLocalePath } from '../i18n/translations';
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const sampleNews = {
+  es: [
+    {
+      title: 'El Tribunal Supremo anula parte del Registro Único de Alquiler Turístico',
+      excerpt: 'Qué cambia para las viviendas vacacionales en Lanzarote tras la reciente resolución judicial.',
+      slug: 'registro-vivienda-vacacional',
+      date: '2025-06-01',
+      tags: ['Vivienda vacacional', 'Turismo'],
+    },
+    {
+      title: 'Solución extrajudicial de conflictos en Lanzarote',
+      excerpt: 'La Ley 1/2025 introduce un cambio relevante en la forma de afrontar determinados conflictos.',
+      slug: 'solucion-extrajudicial',
+      date: '2025-05-15',
+      tags: ['MASC', 'Litigios'],
+    },
+    {
+      title: 'Nueva oficina en Playa Blanca',
+      excerpt: 'Una nueva oficina física en el sur de la isla para mejorar la atención al cliente.',
+      slug: 'nueva-oficina-playa-blanca',
+      date: '2025-04-20',
+      tags: ['Despacho', 'Playa Blanca'],
+    },
+  ],
+
+  en: [
+    {
+      title: 'Supreme Court annuls part of the Holiday Rental Registry',
+      excerpt: 'What changes for holiday rentals in Lanzarote following the recent court ruling.',
+      slug: 'holiday-rental-registry',
+      date: '2025-06-01',
+      tags: ['Holiday rentals', 'Tourism'],
+    },
+    {
+      title: 'Alternative Dispute Resolution in Lanzarote',
+      excerpt: 'Law 1/2025 introduces a relevant change in the way certain disputes are approached.',
+      slug: 'alternative-dispute-resolution',
+      date: '2025-05-15',
+      tags: ['ADR', 'Litigation'],
+    },
+    {
+      title: 'New office in Playa Blanca',
+      excerpt: 'A new physical office in the south of the island to improve client service.',
+      slug: 'new-office-playa-blanca',
+      date: '2025-04-20',
+      tags: ['Firm news', 'Playa Blanca'],
+    },
+  ],
+
+  de: [
+    {
+      title: 'Oberster Gerichtshof hebt Teile des Ferienvermietungsregisters auf',
+      excerpt: 'Was sich nach der jüngsten Entscheidung für Ferienwohnungen auf Lanzarote ändert.',
+      slug: 'ferienvermietungsregister',
+      date: '2025-06-01',
+      tags: ['Ferienvermietung', 'Tourismus'],
+    },
+    {
+      title: 'Außergerichtliche Streitbeilegung auf Lanzarote',
+      excerpt: 'Das Gesetz 1/2025 bringt eine relevante Änderung bei bestimmten Streitigkeiten.',
+      slug: 'aussergerichtliche-streitbeilegung',
+      date: '2025-05-15',
+      tags: ['Streitbeilegung', 'Prozessrecht'],
+    },
+    {
+      title: 'Neues Büro in Playa Blanca',
+      excerpt: 'Ein neues Büro im Süden der Insel, um die Betreuung unserer Mandanten zu verbessern.',
+      slug: 'neues-buero-playa-blanca',
+      date: '2025-04-20',
+      tags: ['Kanzlei', 'Playa Blanca'],
+    },
+  ],
+};
+
+const news = sampleNews[lang] || sampleNews.es;
+
+function formatDate(dateStr) {
+  return new Date(dateStr).toLocaleDateString(
+    lang === 'es' ? 'es-ES' : lang === 'de' ? 'de-DE' : 'en-US',
+    { year: 'numeric', month: 'long', day: 'numeric' }
+  );
+}
+---
+
+<section class="bg-[#F3F9FD] py-section" id="news">
+  <div class="container-premium">
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end" data-animate>
+      <div class="lg:col-span-8">
+        <span class="section-label">
+          {lang === 'es'
+            ? 'Actualidad jurídica'
+            : lang === 'en'
+            ? 'Legal updates'
+            : 'Rechtliche Aktualität'}
+        </span>
+
+        <h2 class="text-heading mt-5 text-ink">
+          {t('news.title')}
+        </h2>
+      </div>
+
+      <div class="lg:col-span-4 lg:text-right">
+        <a href={getLocalePath('/noticias/', lang)} class="btn-outline">
+          {t('news.more')}
+        </a>
+      </div>
+    </div>
+
+    <div class="mt-14 border-t border-black/10" data-animate>
+      {news.map((item) => (
+        <a
+          href={getLocalePath(`/noticias/${item.slug}/`, lang)}
+          class="group grid grid-cols-1 lg:grid-cols-12 gap-6 py-8 border-b border-black/10 no-underline"
+        >
+          <time class="lg:col-span-2 text-xs uppercase tracking-[0.22em] text-muted pt-1">
+            {formatDate(item.date)}
+          </time>
+
+          <div class="lg:col-span-6">
+            <h3 class="text-2xl md:text-3xl tracking-[-0.055em] leading-tight text-ink group-hover:text-brand-500 transition-colors">
+              {item.title}
+            </h3>
+
+            <div class="flex flex-wrap gap-2 mt-4">
+              {item.tags.map((tag) => (
+                <span class="inline-flex items-center px-3 py-1 rounded-full border border-brand-500/20 bg-brand-50 text-brand-700 text-[11px] uppercase tracking-[0.16em]">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <p class="lg:col-span-3 text-[15px] text-muted leading-relaxed">
+            {item.excerpt}
+          </p>
+
+          <span class="lg:col-span-1 lg:text-right text-brand-500 transition-transform duration-400 group-hover:translate-x-1">
+            →
+          </span>
+        </a>
+      ))}
+    </div>
+
+  </div>
+</section>

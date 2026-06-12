@@ -1,0 +1,173 @@
+---
+import { getLocalePath } from '../i18n/translations';
+
+const { lang } = Astro.props;
+
+const copy = {
+  es: {
+    label: 'Áreas de trabajo',
+    title: 'Asesoramiento jurídico adaptado a cada asunto.',
+    intro: 'Trabajamos en las principales áreas legales que afectan a particulares, empresas, propietarios e inversores en Lanzarote.',
+    more: 'Leer más',
+  },
+  en: {
+    label: 'Work areas',
+    title: 'Legal advice adapted to each matter.',
+    intro: 'We work across the main legal areas affecting individuals, companies, property owners and investors in Lanzarote.',
+    more: 'Read more',
+  },
+  de: {
+    label: 'Tätigkeitsbereiche',
+    title: 'Rechtsberatung passend zu jedem Anliegen.',
+    intro: 'Wir beraten in den wichtigsten Rechtsgebieten für Privatpersonen, Unternehmen, Eigentümer und Investoren auf Lanzarote.',
+    more: 'Mehr lesen',
+  },
+};
+
+const t = copy[lang] || copy.es;
+
+const areas = [
+  {
+    title: { es: 'Derecho inmobiliario', en: 'Real Estate Law', de: 'Immobilienrecht' },
+    text: {
+      es: 'Compraventas, arrendamientos, comunidades, contratos de obra e inversión inmobiliaria en Canarias.',
+      en: 'Property sales, leases, communities of owners, construction contracts and real estate investment.',
+      de: 'Immobilienkäufe, Mietverträge, Eigentümergemeinschaften, Bauverträge und Investitionen.',
+    },
+    slug: 'inmobiliario',
+    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1200&q=80',
+  },
+  {
+    title: { es: 'Derecho de sociedades y mercantil', en: 'Corporate and Commercial Law', de: 'Gesellschafts- und Handelsrecht' },
+    text: {
+      es: 'Constitución de sociedades, acuerdos societarios, operaciones mercantiles y asesoramiento empresarial.',
+      en: 'Company incorporation, corporate resolutions, business transactions and corporate advice.',
+      de: 'Gesellschaftsgründungen, Beschlüsse, Handelsgeschäfte und Unternehmensberatung.',
+    },
+    slug: 'mercantil',
+    image: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1200&q=80',
+  },
+  {
+    title: { es: 'Daños personales', en: 'Personal Injury', de: 'Personenschäden' },
+    text: {
+      es: 'Reclamaciones por accidentes, responsabilidad civil y daños personales con elementos locales o internacionales.',
+      en: 'Claims arising from accidents, civil liability and personal injury with local or international elements.',
+      de: 'Ansprüche aus Unfällen, Haftpflicht und Personenschäden mit lokalem oder internationalem Bezug.',
+    },
+    slug: 'danos-personales',
+    image: 'https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=1200&q=80',
+  },
+  {
+    title: { es: 'Litigios', en: 'Litigation', de: 'Prozessführung' },
+    text: {
+      es: 'Procedimientos judiciales civiles y mercantiles, reclamaciones, desahucios, recursos y ejecución de resoluciones.',
+      en: 'Civil and commercial court proceedings, claims, evictions, appeals and enforcement of judgments.',
+      de: 'Zivil- und Handelsverfahren, Forderungen, Räumungen, Berufungen und Vollstreckungen.',
+    },
+    slug: 'litigios',
+    image: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1200&q=80',
+  },
+  {
+    title: { es: 'Derecho administrativo', en: 'Administrative Law', de: 'Verwaltungsrecht' },
+    text: {
+      es: 'Licencias, permisos, autorizaciones, recursos administrativos y procedimientos frente a Administraciones públicas.',
+      en: 'Licences, permits, authorisations, administrative appeals and public administration proceedings.',
+      de: 'Lizenzen, Genehmigungen, Rechtsbehelfe und Verfahren gegenüber Behörden.',
+    },
+    slug: 'administrativo',
+    image: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=80',
+  },
+  {
+    title: { es: 'Servicios complementarios', en: 'Additional Services', de: 'Ergänzende Dienstleistungen' },
+    text: {
+      es: 'Traducciones, obtención de NIF, poderes, suministros, presentación de instancias y gestiones de apoyo.',
+      en: 'Translations, tax identification numbers, powers of attorney, utilities and complementary procedures.',
+      de: 'Übersetzungen, Steuernummern, Vollmachten, Versorgungsverträge und ergänzende Dienstleistungen.',
+    },
+    slug: 'servicios-complementarios',
+    image: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1200&q=80',
+  },
+  {
+    title: { es: 'Otras áreas del Derecho', en: 'Other Areas of Law', de: 'Weitere Rechtsgebiete' },
+    text: {
+      es: 'Contratos civiles, derecho de familia, sucesiones, testamentos, herencias y derecho penal.',
+      en: 'Civil contracts, family law, inheritance, wills, estates and criminal law.',
+      de: 'Zivilverträge, Familienrecht, Erbrecht, Testamente, Nachlässe und Strafrecht.',
+    },
+    slug: 'otras-areas',
+    image: 'https://images.unsplash.com/photo-1521790797524-b2497295b8a0?auto=format&fit=crop&w=1200&q=80',
+  },
+  {
+    title: { es: 'Vivienda vacacional', en: 'Holiday Rentals', de: 'Ferienvermietung' },
+    text: {
+      es: 'Alquiler turístico, registros, declaraciones responsables, inspecciones, sanciones y normativa turística.',
+      en: 'Holiday rentals, registrations, responsible declarations, inspections, sanctions and tourism regulations.',
+      de: 'Ferienvermietung, Registrierungen, Erklärungen, Inspektionen, Sanktionen und Tourismusrecht.',
+    },
+    slug: 'vivienda-vacacional',
+    image: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80',
+  },
+  {
+    title: { es: 'Solución extrajudicial de conflictos', en: 'Extrajudicial Dispute Resolution', de: 'Außergerichtliche Streitbeilegung' },
+    text: {
+      es: 'Negociación, mediación, reclamaciones extrajudiciales y resolución ágil de conflictos civiles y mercantiles.',
+      en: 'Negotiation, mediation, out-of-court claims and efficient resolution of civil and commercial disputes.',
+      de: 'Verhandlung, Mediation, außergerichtliche Forderungen und effiziente Streitbeilegung.',
+    },
+    slug: 'solucion-extrajudicial',
+    image: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1200&q=80',
+  },
+];
+---
+
+<section class="bg-white text-ink py-section" id="areas">
+  <div class="container-premium">
+    <div class="max-w-5xl mx-auto text-center" data-animate>
+      <span class="section-label">{t.label}</span>
+
+      <h2 class="text-heading mt-5 text-ink">
+        {t.title}
+      </h2>
+
+      <p class="mt-6 text-lg text-muted leading-relaxed max-w-3xl mx-auto">
+        {t.intro}
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 mt-12" data-animate>
+      {areas.map((area) => (
+        <a
+          href={getLocalePath(`/areas/${area.slug}/`, lang)}
+          class="area-card group bg-white border border-black/10 rounded-[18px] overflow-hidden no-underline transition-all duration-400 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(17,17,17,.10)]"
+        >
+          <div class="relative aspect-[21/9] overflow-hidden bg-brand-900">
+            <img
+              src={area.image}
+              alt={area.title[lang]}
+              loading="lazy"
+              class="h-full w-full object-cover grayscale-[35%] transition duration-700 group-hover:grayscale-0 group-hover:scale-[1.04]"
+            />
+
+            <div class="absolute inset-0 bg-[#06121C]/20 transition duration-400 group-hover:bg-[#06121C]/8"></div>
+          </div>
+
+          <div class="p-6 md:p-7 min-h-[255px] flex flex-col">
+            <h3 class="text-[1.45rem] md:text-[1.65rem] leading-tight tracking-[-0.055em] text-ink">
+              {area.title[lang]}
+            </h3>
+
+            <p class="mt-4 text-[14.5px] leading-relaxed text-muted">
+              {area.text[lang]}
+            </p>
+
+            <div class="mt-auto pt-6">
+  <span class="inline-flex w-full items-center justify-center px-5 py-3.5 bg-brand-800 text-white text-[12px] uppercase tracking-[0.18em] transition-all duration-400 group-hover:bg-brand-600">
+                {t.more}
+              </span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

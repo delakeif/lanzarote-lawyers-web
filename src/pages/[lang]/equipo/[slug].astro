@@ -1,0 +1,512 @@
+---
+import BaseLayout from '../../../layouts/Base.astro';
+import CTASection from '../../../components/CTASection.astro';
+import { getLocalePath } from '../../../i18n/translations';
+import {
+  teamMembers,
+  getTeamSlugs,
+  getTeamMemberBySlug,
+} from '../../../data/team';
+
+export function getStaticPaths() {
+  return ['es', 'en', 'de'].flatMap((lang) =>
+    getTeamSlugs().map((slug) => ({
+      params: { lang, slug },
+      props: {
+        lang,
+        member: getTeamMemberBySlug(slug),
+      },
+    }))
+  );
+}
+
+const { lang, member } = Astro.props;
+
+const role = member.role[lang] || member.role.es;
+const facts = member.facts[lang] || member.facts.es;
+const specialties = member.specialties[lang] || member.specialties.es;
+const email = member.email || '';
+
+const otherMembers = teamMembers.filter((item) => item.slug !== member.slug);
+
+const title = `${member.name} | Izquierdo y de la Cueva`;
+const description = `${member.name}, ${role}, en Izquierdo y de la Cueva.`;
+
+const labels = {
+  es: {
+    back: 'Volver al equipo',
+    profile: 'Perfil',
+    about: 'Sobre su trayectoria',
+    training: 'Formación y datos',
+    specialties: 'Especialidades',
+    languages: 'Idiomas y despacho',
+    contact: 'Contacto directo',
+    contactText:
+      'Para consultas profesionales, puedes contactar con el despacho y nuestro equipo derivará el asunto a la persona adecuada.',
+    contactButton: 'Contactar',
+    noSpecialties: 'Área de administración y soporte interno del despacho.',
+    firm: 'Despacho',
+    role: 'Cargo',
+    otherTeamLabel: 'Equipo',
+    otherTeamTitle: 'También forman parte del despacho',
+    viewProfile: 'Ver perfil',
+  },
+  en: {
+    back: 'Back to team',
+    profile: 'Profile',
+    about: 'Professional background',
+    training: 'Education and details',
+    specialties: 'Practice areas',
+    languages: 'Languages and firm',
+    contact: 'Direct contact',
+    contactText:
+      'For professional enquiries, please contact the firm and our team will direct the matter to the right person.',
+    contactButton: 'Contact',
+    noSpecialties: 'Administration and internal support area of the firm.',
+    firm: 'Firm',
+    role: 'Role',
+    otherTeamLabel: 'Team',
+    otherTeamTitle: 'Other members of the firm',
+    viewProfile: 'View profile',
+  },
+  de: {
+    back: 'Zurück zum Team',
+    profile: 'Profil',
+    about: 'Beruflicher Werdegang',
+    training: 'Ausbildung und Daten',
+    specialties: 'Schwerpunkte',
+    languages: 'Sprachen und Kanzlei',
+    contact: 'Direkter Kontakt',
+    contactText:
+      'Für berufliche Anfragen kontaktieren Sie bitte die Kanzlei. Unser Team leitet die Angelegenheit an die passende Person weiter.',
+    contactButton: 'Kontakt',
+    noSpecialties: 'Verwaltung und interne Unterstützung der Kanzlei.',
+    firm: 'Kanzlei',
+    role: 'Position',
+    otherTeamLabel: 'Team',
+    otherTeamTitle: 'Weitere Mitglieder der Kanzlei',
+    viewProfile: 'Profil ansehen',
+  },
+};
+
+const l = labels[lang] || labels.es;
+
+const introText = {
+  es: `${member.name} forma parte del equipo de Izquierdo y de la Cueva, aportando una atención cercana, rigurosa y orientada a las necesidades concretas de cada cliente. Su trayectoria combina experiencia profesional, conocimiento práctico del entorno jurídico de Lanzarote y una forma de trabajar basada en la claridad, la confianza y el seguimiento personalizado de cada asunto.`,
+  en: `${member.name} is part of the Izquierdo y de la Cueva team, providing close, rigorous and client-focused support. Their professional background combines practical legal experience in Lanzarote with a clear, reliable and personalised approach to every matter.`,
+  de: `${member.name} ist Teil des Teams von Izquierdo y de la Cueva und steht für eine persönliche, sorgfältige und mandantenorientierte Betreuung. Der berufliche Werdegang verbindet praktische Erfahrung auf Lanzarote mit Klarheit, Vertrauen und individueller Begleitung jedes Mandats.`,
+};
+
+const filteredLanguageFacts = facts.filter((fact) => {
+  const lower = fact.toLowerCase();
+  return (
+    lower.includes('idioma') ||
+    lower.includes('language') ||
+    lower.includes('sprache') ||
+    lower.includes('incorporación') ||
+    lower.includes('joined') ||
+    lower.includes('eintritt')
+  );
+});
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  lang={lang}
+>
+  <section class="relative overflow-hidden bg-[#06121C] text-white">
+    <div class="grid min-h-[74vh] grid-cols-1 lg:grid-cols-[1fr_0.46fr]">
+      <div class="relative flex items-end bg-[linear-gradient(120deg,#06121C_0%,#0B2538_48%,#123A52_100%)] px-6 pt-32 pb-16 md:px-12 md:pt-36 lg:px-20 lg:pt-40 lg:pb-20">
+        <div class="absolute left-6 top-32 bottom-20 hidden w-[5px] bg-[#7FB7D5] md:block"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(33,98,135,.38),transparent_34%)]"></div>
+
+        <div class="relative z-10 max-w-5xl md:pl-10">
+          <a
+            href={getLocalePath('/equipo/', lang)}
+            class="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.24em] text-white/62 no-underline transition-colors hover:text-white"
+          >
+            ← {l.back}
+          </a>
+
+          <p class="mt-12 text-[clamp(1.2rem,2vw,2rem)] leading-tight tracking-[-0.025em] text-white/86">
+            {role}
+          </p>
+
+          <h1 class="mt-7 max-w-5xl text-[clamp(3.7rem,7.4vw,9rem)] leading-[0.9] tracking-[-0.055em] text-white">
+            {member.name}
+          </h1>
+
+          <div class="mt-10 flex flex-wrap items-center gap-x-7 gap-y-3 text-[15px] md:text-[17px] font-medium text-white/72">
+            <span>{l.firm}: Izquierdo y de la Cueva</span>
+            <span class="hidden h-4 w-px bg-white/24 md:block"></span>
+            <span>{l.role}: {role}</span>
+
+            {email && (
+              <span class="inline-flex items-center gap-x-7 gap-y-3">
+                <span class="hidden h-4 w-px bg-white/24 md:block"></span>
+                <a href={`mailto:${email}`} class="text-white/80 no-underline hover:text-white">
+                  {email}
+                </a>
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div class="relative min-h-[560px] overflow-hidden bg-white">
+        <img
+          src={member.image}
+          alt={member.name}
+          class="absolute inset-0 h-full w-full object-cover object-top"
+        />
+
+        <div class="absolute inset-x-0 bottom-0 h-[22%] bg-gradient-to-t from-white/18 to-transparent"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white py-section text-ink">
+    <div class="container-premium">
+      <div class="grid grid-cols-1 gap-10 lg:grid-cols-[1.05fr_0.78fr] lg:gap-20">
+        <article>
+          <span class="section-label text-brand-700">
+            {l.profile}
+          </span>
+
+          <h2 class="mt-5 max-w-3xl text-[clamp(2.15rem,3.8vw,4.1rem)] leading-[0.98] tracking-[-0.06em] text-ink">
+            {l.about}
+          </h2>
+
+          <div class="mt-10 max-w-4xl space-y-7 text-[18px] leading-relaxed text-ink/72">
+            <p>
+              {introText[lang] || introText.es}
+            </p>
+
+            {facts.slice(0, 2).map((fact) => (
+              <p>
+                {fact}
+              </p>
+            ))}
+          </div>
+        </article>
+
+        <aside class="rounded-[24px] bg-[#EAF2F6] p-6 shadow-[0_26px_80px_rgba(17,17,17,.06)] md:p-8 lg:p-10">
+          <div class="space-y-3">
+            <details class="profile-accordion group">
+              <summary>
+                <span>{l.training}</span>
+                <strong></strong>
+              </summary>
+
+              <div class="accordion-content">
+                <ul class="info-list">
+                  {facts.map((fact) => (
+                    <li>
+                      <span class="info-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M20 6 9 17l-5-5"></path>
+                        </svg>
+                      </span>
+                      <span>{fact}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </details>
+
+            <details class="profile-accordion group">
+              <summary>
+                <span>{l.specialties}</span>
+                <strong></strong>
+              </summary>
+
+              <div class="accordion-content">
+                {specialties.length > 0 ? (
+                  <ul class="info-list">
+                    {specialties.map((specialty) => (
+                      <li>
+                        <span class="info-icon">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 3v18M5 7h14M7 7l-3 7h6L7 7Zm10 0l-3 7h6l-3-7Z"></path>
+                          </svg>
+                        </span>
+                        <span>{specialty}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>{l.noSpecialties}</p>
+                )}
+              </div>
+            </details>
+
+            <details class="profile-accordion group">
+              <summary>
+                <span>{l.languages}</span>
+                <strong></strong>
+              </summary>
+
+              <div class="accordion-content">
+                <ul class="info-list">
+                  {(filteredLanguageFacts.length > 0 ? filteredLanguageFacts : facts.slice(-2)).map((fact) => (
+                    <li>
+                      <span class="info-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z"></path>
+                          <path d="M3.6 9h16.8M3.6 15h16.8M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"></path>
+                        </svg>
+                      </span>
+                      <span>{fact}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </details>
+
+            <details class="profile-accordion group">
+              <summary>
+                <span>{l.contact}</span>
+                <strong></strong>
+              </summary>
+
+              <div class="accordion-content">
+                <div class="contact-box">
+                  {email ? (
+                    <a href={`mailto:${email}`} class="contact-mail">
+                      <span class="info-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M4 4h16v16H4V4Z"></path>
+                          <path d="m4 7 8 6 8-6"></path>
+                        </svg>
+                      </span>
+                      <span>{email}</span>
+                    </a>
+                  ) : (
+                    <p>{l.contactText}</p>
+                  )}
+
+                  <a
+                    href={getLocalePath('/contactar/', lang)}
+                    class="mt-5 inline-flex bg-[#216287] px-5 py-3 text-[11px] uppercase tracking-[0.18em] text-white no-underline transition-colors hover:bg-[#16425C]"
+                  >
+                    {l.contactButton}
+                  </a>
+                </div>
+              </div>
+            </details>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-[#F3F9FD] py-section text-ink overflow-hidden">
+    <div class="container-premium">
+      <div class="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+        <div>
+          <span class="section-label text-brand-700">
+            {l.otherTeamLabel}
+          </span>
+
+          <h2 class="mt-5 max-w-3xl text-[clamp(2.3rem,4vw,4.8rem)] leading-[0.95] tracking-[-0.08em] text-ink">
+            {l.otherTeamTitle}
+          </h2>
+        </div>
+
+        <a
+          href={getLocalePath('/equipo/', lang)}
+          class="text-[12px] uppercase tracking-[0.22em] text-brand-700 no-underline hover:text-brand-900"
+        >
+          {l.back} →
+        </a>
+      </div>
+
+      <div class="team-profile-slider -mx-6 flex gap-5 overflow-x-auto px-6 pb-6 md:-mx-10 md:px-10">
+        {otherMembers.map((person) => (
+          <a
+            href={getLocalePath(`/equipo/${person.slug}/`, lang)}
+            class="team-slide-card group relative block h-[470px] min-w-[285px] overflow-hidden bg-[#06121C] no-underline sm:min-w-[330px] lg:min-w-[360px]"
+            aria-label={person.name}
+          >
+            <img
+              src={person.image}
+              alt={person.name}
+              loading="lazy"
+              class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.035]"
+            />
+
+            <div class="absolute inset-0 bg-black/5"></div>
+            <div class="absolute inset-x-0 bottom-0 h-[62%] bg-gradient-to-t from-black/95 via-black/50 to-transparent"></div>
+
+            <div class="absolute inset-x-0 bottom-0 z-10 p-6">
+              <span class="inline-flex items-center border border-white/75 bg-[#06121C]/72 px-3.5 py-2 text-[10px] uppercase tracking-[0.28em] text-white shadow-[0_8px_24px_rgba(0,0,0,.45)] backdrop-blur-[3px]">
+                {person.role[lang] || person.role.es}
+              </span>
+
+              <h3 class="mt-5 text-[clamp(1.65rem,2.15vw,2.45rem)] leading-[0.96] tracking-[-0.075em] text-white [text-shadow:0_4px_20px_rgba(0,0,0,.88)]">
+                {person.name}
+              </h3>
+
+              <p class="mt-5 text-[11px] uppercase tracking-[0.2em] text-white/58">
+                {l.viewProfile}
+              </p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTASection lang={lang} />
+</BaseLayout>
+
+<style>
+  .profile-accordion {
+    border-bottom: 1px solid rgba(31, 42, 68, 0.14);
+    padding: 0;
+  }
+
+  .profile-accordion:last-child {
+    border-bottom: 0;
+  }
+
+  .profile-accordion summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.25rem 0;
+    color: #1f2a44;
+    font-weight: 700;
+    font-size: clamp(1.2rem, 1.65vw, 1.55rem);
+    letter-spacing: -0.025em;
+  }
+
+  .profile-accordion summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .profile-accordion summary span {
+    position: relative;
+    padding-left: 1.35rem;
+  }
+
+  .profile-accordion summary span::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.42em;
+    width: 0.5rem;
+    height: 0.5rem;
+    background: #216287;
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+  }
+
+  .profile-accordion summary strong::after {
+    content: '+';
+    color: #111;
+    font-size: 1.55rem;
+    font-weight: 500;
+  }
+
+  .profile-accordion[open] summary strong::after {
+    content: '−';
+    color: #216287;
+  }
+
+  .accordion-content {
+    padding: 0 0 1.5rem 1.35rem;
+    color: rgba(31, 42, 68, 0.78);
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  .info-list {
+    display: grid;
+    gap: 0.9rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .info-list li {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+  }
+
+  .info-icon {
+    display: inline-flex;
+    width: 1.55rem;
+    height: 1.55rem;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: rgba(33, 98, 135, 0.11);
+    color: #216287;
+    margin-top: 0.08rem;
+  }
+
+  .info-icon svg {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+
+  .contact-box p {
+    color: rgba(31, 42, 68, 0.72);
+    line-height: 1.65;
+  }
+
+  .contact-mail {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    color: #1f2a44;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+
+  .contact-mail:hover {
+    color: #216287;
+  }
+
+  .team-profile-slider {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(33, 98, 135, 0.5) transparent;
+  }
+
+  .team-profile-slider::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .team-profile-slider::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .team-profile-slider::-webkit-scrollbar-thumb {
+    background: rgba(33, 98, 135, 0.35);
+    border-radius: 999px;
+  }
+
+  .team-slide-card {
+    box-shadow: 0 24px 80px rgba(17, 17, 17, 0.08);
+    transition:
+      transform 0.45s ease,
+      box-shadow 0.45s ease;
+  }
+
+  .team-slide-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 34px 100px rgba(17, 17, 17, 0.14);
+  }
+
+  @media (max-width: 1023px) {
+    .profile-accordion summary {
+      font-size: 1.28rem;
+    }
+  }
+</style>

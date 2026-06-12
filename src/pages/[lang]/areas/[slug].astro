@@ -1,0 +1,372 @@
+---
+import BaseLayout from '../../../layouts/Base.astro';
+import CTASection from '../../../components/CTASection.astro';
+import { getLocalePath } from '../../../i18n/translations';
+import { areas } from '../../../data/areas.js';
+import { getAreaDetail } from '../../../data/areaDetails.js';
+
+export function getStaticPaths() {
+  return ['es', 'en', 'de'].flatMap((lang) =>
+    areas.map((area) => ({
+      params: {
+        lang,
+        slug: area.slug,
+      },
+      props: {
+        lang,
+        area,
+      },
+    }))
+  );
+}
+
+const { lang, area } = Astro.props;
+
+const labels = {
+  es: {
+    area: 'Área de trabajo',
+    what: 'Qué cubrimos',
+    how: 'Cómo trabajamos',
+    key: 'Enfoque',
+    areasSlider: 'Áreas que trabajamos',
+    areasSliderText: 'Explora otros servicios del despacho.',
+    contact: 'Consultar este asunto',
+    viewArea: 'Ver área',
+  },
+  en: {
+    area: 'Practice area',
+    what: 'What we cover',
+    how: 'How we work',
+    key: 'Approach',
+    areasSlider: 'Practice areas',
+    areasSliderText: 'Explore other services of the firm.',
+    contact: 'Enquire about this matter',
+    viewArea: 'View area',
+  },
+  de: {
+    area: 'Tätigkeitsbereich',
+    what: 'Was wir abdecken',
+    how: 'Wie wir arbeiten',
+    key: 'Ansatz',
+    areasSlider: 'Tätigkeitsbereiche',
+    areasSliderText: 'Entdecken Sie weitere Leistungen der Kanzlei.',
+    contact: 'Anfrage zu diesem Thema',
+    viewArea: 'Bereich ansehen',
+  },
+};
+
+const l = labels[lang] || labels.es;
+
+const detail = getAreaDetail(area.slug, lang);
+const titleText = area.title?.[lang] || area.title?.es;
+const summaryText = area.summary?.[lang] || area.summary?.es || '';
+const introText = detail?.lead || area.intro?.[lang] || area.intro?.es || summaryText;
+
+const bullets =
+  detail?.bullets ||
+  area.services?.map((service) => service.title?.[lang] || service.title?.es) ||
+  [];
+
+const process = detail?.process || [];
+
+const highlightTitle = detail?.highlightTitle || titleText;
+const highlightText = detail?.highlightText || summaryText;
+
+const otherAreas = areas.filter((item) => item.slug !== area.slug);
+
+const pageTitle = `${titleText} | Izquierdo y de la Cueva`;
+const pageDescription = summaryText || introText;
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  lang={lang}
+>
+  <section class="area-hero relative flex min-h-[56vh] items-end overflow-hidden bg-[#06121C] text-white">
+    <img
+      src={area.image}
+      alt={titleText}
+      class="absolute inset-0 h-full w-full object-cover object-center"
+    />
+
+    <div class="absolute inset-0 bg-[linear-gradient(115deg,rgba(3,8,13,.94)_0%,rgba(8,28,43,.88)_43%,rgba(33,98,135,.42)_100%)]"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-[#06121C]/42 via-transparent to-[#06121C]/68"></div>
+
+    <div class="relative z-10 w-full">
+      <div class="container-premium">
+        <div class="area-hero-content pb-12 pt-32 md:pb-14 md:pt-36">
+          <p class="text-[12px] uppercase tracking-[0.28em] text-brand-200">
+            {l.area}
+          </p>
+
+          <h1 class="area-hero-title mt-5 text-white">
+            {titleText}
+          </h1>
+
+          <p class="mt-7 max-w-3xl text-[17px] leading-relaxed text-white/74 md:text-[19px]">
+            {introText}
+          </p>
+
+          <a
+            href={getLocalePath('/contactar/', lang)}
+            class="mt-9 inline-flex bg-white px-7 py-4 text-[12px] uppercase tracking-[0.2em] text-[#0D2A3E] no-underline transition-all hover:bg-[#DCECF4]"
+          >
+            {l.contact}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-[#F3F9FD] py-20 text-ink">
+    <div class="container-premium">
+      <div class="grid grid-cols-1 gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:gap-14">
+        <div>
+          <span class="section-label text-brand-700">
+            {l.what}
+          </span>
+
+          <h2 class="mt-5 max-w-xl text-[clamp(2.2rem,3.7vw,4.3rem)] leading-[0.96] tracking-[-0.075em] text-ink">
+            {highlightTitle}
+          </h2>
+
+          <p class="mt-7 max-w-xl text-[17px] leading-relaxed text-ink/66">
+            {highlightText}
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+          {bullets.map((bullet) => (
+            <article class="group grid min-h-[88px] grid-cols-[52px_1fr] items-center gap-5 rounded-[18px] border border-black/10 bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_55px_rgba(17,17,17,.075)]">
+              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#EAF2F6] text-brand-700 transition-colors duration-300 group-hover:bg-[#216287] group-hover:text-white">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="20"
+                  height="20"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M20 6 9 17l-5-5"></path>
+                </svg>
+              </div>
+
+              <p class="m-0 text-[17px] leading-[1.35] tracking-[-0.015em] text-ink/80">
+                {bullet}
+              </p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white py-section text-ink">
+    <div class="container-premium">
+      <div class="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_0.95fr] lg:items-stretch">
+        <div class="relative min-h-[430px] overflow-hidden rounded-[26px] bg-[#06121C]">
+          <img
+            src={area.image}
+            alt={titleText}
+            loading="lazy"
+            class="absolute inset-0 h-full w-full object-cover object-center"
+          />
+
+          <div class="absolute inset-0 bg-[linear-gradient(120deg,rgba(6,18,28,.92)_0%,rgba(13,42,62,.68)_52%,rgba(33,98,135,.22)_100%)]"></div>
+
+          <div class="absolute inset-x-0 bottom-0 p-8 md:p-10">
+            <span class="section-label text-brand-200">
+              {l.key}
+            </span>
+
+            <h2 class="mt-5 max-w-xl text-[clamp(2.2rem,4vw,4.6rem)] leading-[0.96] tracking-[-0.075em] text-white">
+              {highlightTitle}
+            </h2>
+
+            <p class="mt-6 max-w-xl text-[16px] leading-relaxed text-white/70">
+              {highlightText}
+            </p>
+          </div>
+        </div>
+
+        <div class="rounded-[26px] bg-[#EAF2F6] p-6 shadow-[0_26px_80px_rgba(17,17,17,.06)] md:p-8 lg:p-10">
+          <span class="section-label text-brand-700">
+            {l.how}
+          </span>
+
+          <div class="mt-8 space-y-5">
+            {process.map((item, index) => (
+              <article class="flex gap-5 border-b border-[#0D2A3E]/12 pb-5 last:border-b-0 last:pb-0">
+                <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#216287] text-[12px] font-medium text-white">
+                  {String(index + 1).padStart(2, '0')}
+                </div>
+
+                <div>
+                  <h3 class="text-[1.35rem] leading-tight tracking-[-0.04em] text-[#1f2a44]">
+                    {item.title}
+                  </h3>
+
+                  <p class="mt-2 text-[15.5px] leading-relaxed text-[#1f2a44]/70">
+                    {item.text}
+                  </p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="overflow-hidden bg-[#F3F9FD] py-section text-ink">
+    <div class="container-premium">
+      <div class="mb-10 max-w-3xl">
+        <span class="section-label text-brand-700">
+          {l.areasSlider}
+        </span>
+
+        <h2 class="mt-5 text-[clamp(2.3rem,4vw,4.8rem)] leading-[0.95] tracking-[-0.08em] text-ink">
+          {l.areasSliderText}
+        </h2>
+      </div>
+
+      <div class="area-slider -mx-6 flex gap-5 overflow-x-auto px-6 pb-6 md:-mx-10 md:px-10">
+        {otherAreas.map((related) => {
+          const relatedTitle = related.title?.[lang] || related.title?.es;
+          const relatedSummary = related.summary?.[lang] || related.summary?.es || '';
+
+          const showSummary =
+            relatedSummary &&
+            relatedSummary.trim().toLowerCase() !== relatedTitle.trim().toLowerCase();
+
+          return (
+            <a
+              href={getLocalePath(`/areas/${related.slug}/`, lang)}
+              class="area-slide-card group relative block h-[420px] min-w-[290px] overflow-hidden bg-[#06121C] no-underline sm:min-w-[340px] lg:min-w-[380px]"
+              aria-label={relatedTitle}
+            >
+              <img
+                src={related.image}
+                alt={relatedTitle}
+                loading="lazy"
+                class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.035]"
+              />
+
+              <div class="absolute inset-0 bg-black/22 transition-colors duration-500 group-hover:bg-black/42"></div>
+              <div class="absolute inset-x-0 bottom-0 h-[82%] bg-gradient-to-t from-black via-black/86 via-45% to-transparent"></div>
+
+              <div class="absolute inset-x-0 bottom-0 z-10 p-6">
+                <div class="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-sm">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="20"
+                    height="20"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.55"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d={related.icon}></path>
+                  </svg>
+                </div>
+
+                <h3 class="text-[clamp(1.75rem,2.3vw,2.55rem)] leading-[0.96] tracking-[-0.075em] text-white [text-shadow:0_4px_20px_rgba(0,0,0,.95)]">
+                  {relatedTitle}
+                </h3>
+
+                {showSummary && (
+                  <div class="area-card-description mt-4 max-h-0 overflow-hidden opacity-0 transition-all duration-500 group-hover:max-h-44 group-hover:opacity-100">
+                    <p class="rounded-[14px] bg-black/52 p-4 text-[14px] leading-relaxed text-white shadow-[0_12px_36px_rgba(0,0,0,.32)] backdrop-blur-[3px]">
+                      {relatedSummary}
+                    </p>
+                  </div>
+                )}
+
+                <p class="mt-6 text-[11px] uppercase tracking-[0.2em] text-white/68 transition-colors duration-300 group-hover:text-white">
+                  {l.viewArea}
+                </p>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <CTASection lang={lang} />
+</BaseLayout>
+
+<style>
+  .area-hero-content {
+    width: 100%;
+    max-width: 920px;
+    margin-left: 0;
+    text-align: left;
+  }
+
+  .area-hero-title {
+    max-width: 880px;
+    font-size: clamp(3rem, 6.2vw, 6.8rem);
+    line-height: 0.92;
+    letter-spacing: -0.065em;
+  }
+
+  .area-slider {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(33, 98, 135, 0.5) transparent;
+  }
+
+  .area-slider::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .area-slider::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .area-slider::-webkit-scrollbar-thumb {
+    background: rgba(33, 98, 135, 0.35);
+    border-radius: 999px;
+  }
+
+  .area-slide-card {
+    box-shadow: 0 24px 80px rgba(17, 17, 17, 0.08);
+    transition:
+      transform 0.45s ease,
+      box-shadow 0.45s ease;
+  }
+
+  .area-slide-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 34px 100px rgba(17, 17, 17, 0.14);
+  }
+
+  @media (max-width: 767px) {
+    .area-hero {
+      min-height: auto;
+    }
+
+    .area-hero-content {
+      max-width: 100%;
+      padding-top: 8.75rem;
+      padding-bottom: 3.75rem;
+    }
+
+    .area-hero-title {
+      max-width: 100%;
+      font-size: clamp(2.7rem, 12vw, 4.3rem);
+      line-height: 0.96;
+      letter-spacing: -0.055em;
+    }
+
+    .area-slide-card {
+      height: 400px;
+    }
+  }
+</style>

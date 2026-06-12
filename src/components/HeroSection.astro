@@ -1,0 +1,133 @@
+---
+import { useTranslations, getLocalePath } from '../i18n/translations';
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const kicker = {
+  es: 'Abogados en Lanzarote desde 1986',
+  en: 'Lawyers in Lanzarote since 1986',
+  de: 'Rechtsanwälte auf Lanzarote seit 1986',
+}[lang];
+
+const areaLabel = {
+  es: 'Áreas legales',
+  en: 'Practice areas',
+  de: 'Rechtsgebiete',
+}[lang];
+---
+
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#06121C] text-white">
+  <div
+    class="absolute inset-0 bg-cover bg-center"
+    style="background-image: url('/images/hero-team.webp');"
+    aria-hidden="true"
+  ></div>
+
+  <!-- Color plano oscuro, sin radial ni degradado -->
+  <div
+    class="absolute inset-0"
+    style="background-color: rgba(6, 18, 28, 0.80);"
+    aria-hidden="true"
+  ></div>
+
+  <div class="relative z-10 container-premium pt-32 pb-20">
+    <div class="max-w-5xl mx-auto text-center">
+      <p class="section-label text-white/70 mb-8">
+        {kicker}
+      </p>
+
+      <img
+        src="/images/logo-idlc-white.svg"
+        alt="Izquierdo y de la Cueva"
+        class="hero-logo-centered mx-auto"
+      />
+
+      <div class="max-w-3xl mx-auto mt-8">
+        <div class="hero-metrics-line h-px bg-white/30 origin-left scale-x-0"></div>
+
+        <div class="grid grid-cols-3 gap-6 pt-5">
+          <div>
+            <strong class="counter-number block text-3xl md:text-4xl font-light tracking-[-0.05em] text-white" data-count="40">0</strong>
+            <span class="text-xs uppercase tracking-[0.22em] text-white/70">
+              {lang === 'es' ? 'años' : lang === 'en' ? 'years' : 'Jahre'}
+            </span>
+          </div>
+
+          <div>
+            <strong class="counter-number block text-3xl md:text-4xl font-light tracking-[-0.05em] text-white" data-count="3">0</strong>
+            <span class="text-xs uppercase tracking-[0.22em] text-white/70">
+              {lang === 'es' ? 'idiomas' : lang === 'en' ? 'languages' : 'Sprachen'}
+            </span>
+          </div>
+
+          <div>
+            <strong class="counter-number block text-3xl md:text-4xl font-light tracking-[-0.05em] text-white" data-count="2">0</strong>
+            <span class="text-xs uppercase tracking-[0.22em] text-white/70">
+              {lang === 'es' ? 'oficinas' : lang === 'en' ? 'offices' : 'Büros'}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap justify-center gap-4 mt-10">
+        <a
+          href={getLocalePath('/contactar/', lang)}
+          class="inline-flex items-center justify-center px-9 py-4 bg-white text-brand-800 border border-white text-xs uppercase tracking-[0.24em] no-underline transition-all duration-400 hover:bg-brand-100 hover:border-brand-100 hover:text-brand-900 hover:-translate-y-0.5"
+        >
+          {t('hero.cta')}
+        </a>
+
+        <a
+          href={getLocalePath('/areas/', lang)}
+          class="inline-flex items-center justify-center px-9 py-4 bg-white/10 text-white border border-white/40 backdrop-blur-sm text-xs uppercase tracking-[0.24em] no-underline transition-all duration-400 hover:bg-white/20 hover:border-white/70 hover:-translate-y-0.5"
+        >
+          {areaLabel}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-logo-centered {
+    width: min(760px, 88vw);
+    height: auto;
+    filter: drop-shadow(0 24px 55px rgba(0,0,0,.34));
+  }
+
+  .hero-metrics-line {
+    animation: heroLineGrow 850ms cubic-bezier(.19, 1, .22, 1) 350ms forwards;
+  }
+
+  @keyframes heroLineGrow {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+</style>
+
+<script>
+  const counters = document.querySelectorAll('.counter-number');
+
+  counters.forEach((counter) => {
+    const target = Number(counter.getAttribute('data-count') || 0);
+    const duration = 900;
+    const start = performance.now();
+
+    function update(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const value = Math.round(target * eased);
+
+      counter.textContent = String(value);
+
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      } else {
+        counter.textContent = String(target);
+      }
+    }
+
+    requestAnimationFrame(update);
+  });
+</script>

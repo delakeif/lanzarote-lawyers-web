@@ -1,0 +1,88 @@
+---
+import { getLocalePath } from '../i18n/translations';
+import { teamMembers, teamPreviewCopy } from '../data/team';
+
+const { lang } = Astro.props;
+
+const copy = teamPreviewCopy[lang] || teamPreviewCopy.es;
+const team = teamMembers;
+---
+
+<section class="bg-ink text-white py-section overflow-hidden" id="team-preview">
+  <div class="container-premium">
+    <div class="max-w-4xl mx-auto text-center" data-animate>
+      <span class="section-label text-brand-200">
+        {copy.eyebrow}
+      </span>
+
+      <h2 class="text-heading mt-5">
+        {copy.title}
+      </h2>
+
+      <p class="mt-6 text-white/62 text-[16px] leading-relaxed max-w-2xl mx-auto">
+        {copy.intro}
+      </p>
+    </div>
+
+    <div class="team-rail mt-14 flex gap-4 overflow-x-auto pb-8 snap-x snap-mandatory" data-animate>
+      {team.map((person) => (
+        <a
+          href={getLocalePath('/equipo/', lang)}
+          class="team-card group relative shrink-0 w-[78vw] sm:w-[420px] lg:w-[360px] aspect-[3/4] overflow-hidden bg-black snap-start no-underline"
+        >
+          <img
+            src={person.image}
+            alt={person.name}
+            loading="lazy"
+            class="h-full w-full object-cover grayscale transition duration-700 group-hover:grayscale-0 group-hover:scale-[1.035]"
+          />
+
+          <div class="absolute inset-0 bg-[#06121C]/18 transition-opacity duration-500 group-hover:bg-[#06121C]/10"></div>
+
+          <div class="absolute inset-x-0 bottom-0 h-[58%] bg-gradient-to-t from-black/88 via-black/48 to-transparent"></div>
+
+          <div class="absolute inset-x-0 bottom-0 h-[34%] bg-gradient-to-t from-black/78 via-black/32 to-transparent"></div>
+
+          <div class="absolute inset-x-0 bottom-0 h-[62%] bg-gradient-to-t from-[#0D2A3E]/82 via-[#0D2A3E]/38 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
+
+          <div class="absolute left-0 right-0 bottom-0 p-6 md:p-7">
+            <p class="inline-flex mb-4 px-3 py-1.5 bg-black/42 backdrop-blur-sm border border-white/14 text-[11px] tracking-[0.24em] uppercase text-white">
+              {person.role[lang]}
+            </p>
+
+            <h3 class="text-3xl md:text-[2rem] tracking-[-0.06em] leading-none text-white">
+              {person.name}
+            </h3>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <div class="mt-4 text-center" data-animate>
+      <a href={getLocalePath('/equipo/', lang)} class="btn-outline-light">
+        {copy.more}
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .team-rail {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,.25) transparent;
+  }
+
+  .team-rail::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .team-rail::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,.25);
+    border-radius: 999px;
+  }
+
+  .team-card h3,
+  .team-card p {
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.72);
+  }
+</style>

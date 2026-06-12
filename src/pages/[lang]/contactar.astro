@@ -1,0 +1,228 @@
+---
+import BaseLayout from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import CTASection from '../../components/CTASection.astro';
+
+export function getStaticPaths() {
+  return ['es', 'en', 'de'].map((lang) => ({
+    params: { lang },
+    props: { lang },
+  }));
+}
+
+const { lang } = Astro.props;
+
+const copy = {
+  es: {
+    metaTitle: 'Contactar | Izquierdo y de la Cueva',
+    metaDescription: 'Contacta con Izquierdo y de la Cueva Abogados en Lanzarote.',
+    label: 'Contacto',
+    title: 'Hablemos de tu caso.',
+    intro:
+      'Cuéntanos brevemente qué necesitas y nuestro equipo te orientará hacia el profesional adecuado.',
+    phone: 'Teléfono',
+    email: 'Correo electrónico',
+    officesLabel: 'Oficinas',
+    officesTitle: 'Nuestras oficinas en Lanzarote.',
+    officesIntro:
+      'Atendemos en Arrecife y Playa Blanca, con un servicio cercano, multilingüe y adaptado a cada asunto.',
+    mainOffice: 'Oficina principal en Arrecife',
+    secondOffice: 'Oficina en Playa Blanca',
+    openMap: 'Abrir en Google Maps',
+  },
+  en: {
+    metaTitle: 'Contact | Izquierdo y de la Cueva',
+    metaDescription: 'Contact Izquierdo y de la Cueva Lawyers in Lanzarote.',
+    label: 'Contact',
+    title: 'Let’s talk about your matter.',
+    intro:
+      'Tell us briefly what you need and our team will direct your enquiry to the right professional.',
+    phone: 'Phone',
+    email: 'Email',
+    officesLabel: 'Offices',
+    officesTitle: 'Our offices in Lanzarote.',
+    officesIntro:
+      'We assist clients in Arrecife and Playa Blanca, with a close, multilingual service adapted to each matter.',
+    mainOffice: 'Main office in Arrecife',
+    secondOffice: 'Playa Blanca office',
+    openMap: 'Open in Google Maps',
+  },
+  de: {
+    metaTitle: 'Kontakt | Izquierdo y de la Cueva',
+    metaDescription: 'Kontaktieren Sie Izquierdo y de la Cueva Rechtsanwälte auf Lanzarote.',
+    label: 'Kontakt',
+    title: 'Sprechen wir über Ihr Anliegen.',
+    intro:
+      'Schildern Sie uns kurz Ihr Anliegen. Unser Team leitet Ihre Anfrage an die passende Fachperson weiter.',
+    phone: 'Telefon',
+    email: 'E-Mail',
+    officesLabel: 'Büros',
+    officesTitle: 'Unsere Büros auf Lanzarote.',
+    officesIntro:
+      'Wir betreuen Mandanten in Arrecife und Playa Blanca mit einem persönlichen, mehrsprachigen Service.',
+    mainOffice: 'Hauptbüro in Arrecife',
+    secondOffice: 'Büro in Playa Blanca',
+    openMap: 'In Google Maps öffnen',
+  },
+};
+
+const t = copy[lang] || copy.es;
+
+const offices = [
+  {
+    title: t.mainOffice,
+    address: 'C/ Ginés de Castro Nº 12. 35500 – Arrecife, Lanzarote',
+    mapLink:
+      'https://www.google.com/maps/place/Izquierdo+y+de+la+Cueva+Abogados/@28.9635239,-13.5517917,17z/',
+    embed:
+      'https://maps.google.com/maps?hl=es&q=Izquierdo%20y%20de%20la%20Cueva%20Abogados%2C%20C.%20Gin%C3%A9s%20de%20Castro%20y%20%C3%81lvarez%2C%2012%2C%203%C2%B0B%2C%2035500%20Arrecife%2C%20Las%20Palmas&z=17&iwloc=B&output=embed',
+  },
+  {
+    title: t.secondOffice,
+    address: 'C/ Jaime Quesada «El Maestro» Nº 8. 35580 – Playa Blanca, Lanzarote',
+    mapLink:
+      'https://www.google.com/maps/place/Izquierdo+y+de+la+Cueva+Abogados+Playa+Blanca/@28.8638053,-13.8326675,746m/data=!3m2!1e3!4b1!4m6!3m5!1s0xc4637b84777c043:0xa7ab131250e75424!8m2!3d28.8638053!4d-13.8300926!16s%2Fg%2F11yz9ds87g',
+    embed:
+      'https://maps.google.com/maps?hl=es&q=Izquierdo%20y%20de%20la%20Cueva%20Abogados%20Playa%20Blanca%2C%20C%2F%20Jaime%20Quesada%20El%20Maestro%20N%C2%BA%208%2C%2035580%20Playa%20Blanca%2C%20Lanzarote&z=17&iwloc=B&output=embed',
+  },
+];
+---
+
+<BaseLayout
+  title={t.metaTitle}
+  description={t.metaDescription}
+  lang={lang}
+>
+  <PageHero
+    label={t.label}
+    title={t.title}
+    intro={t.intro}
+    image="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1800&q=80"
+  />
+
+  <section class="bg-[#F3F9FD] py-section text-ink">
+    <div class="container-premium">
+      <div class="mb-10 grid grid-cols-1 gap-8 lg:grid-cols-[0.74fr_1.26fr] lg:items-end">
+        <div>
+          <span class="section-label text-brand-700">
+            {t.officesLabel}
+          </span>
+
+          <h2 class="mt-5 max-w-xl text-[clamp(2.3rem,4vw,4.6rem)] leading-[0.95] tracking-[-0.075em]">
+            {t.officesTitle}
+          </h2>
+
+          <p class="mt-7 max-w-xl text-[17px] leading-relaxed text-ink/66">
+            {t.officesIntro}
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <a
+            href="tel:+34928815262"
+            class="contact-info-card group flex items-center gap-4 rounded-[18px] border border-black/10 bg-white p-5 no-underline shadow-[0_18px_55px_rgba(17,17,17,.05)] transition-all hover:-translate-y-1 hover:shadow-[0_24px_70px_rgba(17,17,17,.09)]"
+          >
+            <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#EAF2F6] text-brand-700 transition-colors group-hover:bg-[#216287] group-hover:text-white">
+              <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.77.62 2.61a2 2 0 0 1-.45 2.11L8 9.72a16 16 0 0 0 6.28 6.28l1.28-1.28a2 2 0 0 1 2.11-.45c.84.29 1.71.5 2.61.62A2 2 0 0 1 22 16.92Z"></path>
+              </svg>
+            </span>
+
+            <span>
+              <small class="block text-[11px] uppercase tracking-[0.22em] text-brand-700">
+                {t.phone}
+              </small>
+              <strong class="mt-1 block text-[1.25rem] tracking-[-0.035em] text-ink">
+                +34 928 815 262
+              </strong>
+            </span>
+          </a>
+
+          <a
+            href="mailto:info@lanzarotelawyers.com"
+            class="contact-info-card group flex items-center gap-4 rounded-[18px] border border-black/10 bg-white p-5 no-underline shadow-[0_18px_55px_rgba(17,17,17,.05)] transition-all hover:-translate-y-1 hover:shadow-[0_24px_70px_rgba(17,17,17,.09)]"
+          >
+            <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#EAF2F6] text-brand-700 transition-colors group-hover:bg-[#216287] group-hover:text-white">
+              <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16v16H4V4Z"></path>
+                <path d="m4 7 8 6 8-6"></path>
+              </svg>
+            </span>
+
+            <span class="min-w-0">
+              <small class="block text-[11px] uppercase tracking-[0.22em] text-brand-700">
+                {t.email}
+              </small>
+              <strong class="mt-1 block break-words text-[1.12rem] tracking-[-0.03em] text-ink">
+                info@lanzarotelawyers.com
+              </strong>
+            </span>
+          </a>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        {offices.map((office) => (
+          <article class="office-card overflow-hidden rounded-[26px] border border-black/10 bg-white shadow-[0_26px_90px_rgba(17,17,17,.08)]">
+            <div class="border-b border-black/10 p-6 md:p-7">
+              <div class="flex flex-col gap-5">
+                <div>
+                  <span class="section-label text-brand-700">
+                    {office.title}
+                  </span>
+
+                  <h3 class="mt-4 text-[1.45rem] leading-tight tracking-[-0.055em] text-ink">
+                    {office.address}
+                  </h3>
+                </div>
+
+                <a
+                  href={office.mapLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex w-fit bg-[#216287] px-5 py-3 text-[11px] uppercase tracking-[0.18em] text-white no-underline transition-colors hover:bg-[#16425C]"
+                >
+                  {t.openMap}
+                </a>
+              </div>
+            </div>
+
+            <div class="relative h-[360px] w-full bg-[#06121C] md:h-[420px]">
+              <iframe
+                src={office.embed}
+                class="absolute inset-0 h-full w-full"
+                style="border:0;"
+                loading="lazy"
+                allowfullscreen
+                referrerpolicy="no-referrer-when-downgrade"
+                title={office.title}
+              ></iframe>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTASection lang={lang} />
+</BaseLayout>
+
+<style>
+  .contact-info-card span,
+  .contact-info-card strong,
+  .contact-info-card small {
+    transition:
+      color 0.3s ease,
+      background-color 0.3s ease;
+  }
+
+  .office-card iframe {
+    filter: saturate(0.95) contrast(1.02);
+  }
+
+  @media (max-width: 767px) {
+    .office-card h3 {
+      font-size: 1.25rem;
+    }
+  }
+</style>

@@ -1,0 +1,71 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./src/**/*.{astro,html,js,jsx,md,mdx,ts,tsx}'],
+  theme: {
+    extend: {
+      colors: {
+        ink: '#101214',
+        paper: '#F7F5F1',
+        mist: '#EEF3F5',
+        stone: '#E8E1D6',
+        muted: '#6F7780',
+        brand: {
+          50: '#EEF6FA',
+          100: '#D8E9F1',
+          200: '#B4D4E4',
+          300: '#84B8D0',
+          400: '#4D91B5',
+          500: '#216287',
+          600: '#1A506F',
+          700: '#16425C',
+          800: '#12374D',
+          900: '#0C2637',
+        },
+        navy: {
+          50: '#EEF1F4',
+          100: '#D7DDE4',
+          200: '#AEB9C7',
+          300: '#78889E',
+          400: '#394C67',
+          500: '#111827',
+          600: '#0D1320',
+          700: '#090D16',
+          800: '#05070D',
+          900: '#020306',
+        },
+        gold: {
+          50: '#FBF7F0',
+          100: '#F3EADB',
+          200: '#E7D5B7',
+          300: '#D4B888',
+          400: '#C2A062',
+          500: '#A9874D',
+          600: '#7A6138',
+          700: '#5A482A',
+          800: '#3D301C',
+          900: '#241B0F',
+        },
+        cream: '#F7F5F1',
+        charcoal: '#111111',
+      },
+      fontFamily: {
+        display: ['-apple-system', 'BlinkMacSystemFont', '"Helvetica Neue"', 'Helvetica', 'Arial', 'sans-serif'],
+        body: ['-apple-system', 'BlinkMacSystemFont', '"Helvetica Neue"', 'Helvetica', 'Arial', 'sans-serif'],
+        accent: ['Georgia', '"Times New Roman"', 'serif'],
+      },
+      fontSize: {
+        hero: ['clamp(3.3rem, 9vw, 8.4rem)', { lineHeight: '0.92', letterSpacing: '-0.075em' }],
+        heading: ['clamp(2.35rem, 6vw, 6.5rem)', { lineHeight: '0.95', letterSpacing: '-0.065em' }],
+        subheading: ['clamp(1.15rem, 2vw, 1.75rem)', { lineHeight: '1.25', letterSpacing: '-0.025em' }],
+      },
+      spacing: {
+        section: 'clamp(5rem, 10vw, 9rem)',
+      },
+      transitionDuration: {
+        400: '400ms',
+        600: '600ms',
+      },
+    },
+  },
+  plugins: [],
+};

@@ -1,0 +1,447 @@
+---
+import { useTranslations, getLocalePath, languages } from '../i18n/translations';
+import { areas } from '../data/areas.js';
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const navItems = [
+  { key: 'nav.home', path: '/' },
+  { key: 'nav.areas', path: '/areas/', hasDropdown: true },
+  { key: 'nav.team', path: '/equipo/' },
+  { key: 'nav.news', path: '/noticias/' },
+  { key: 'nav.contact', path: '/contactar/' },
+];
+
+const currentPath = Astro.url.pathname;
+const cleanPath = currentPath.replace(/^\/(es|en|de)/, '') || '/';
+
+function normalizePath(path) {
+  const clean = path.replace(/^\/(es|en|de)(?=\/|$)/, '') || '/';
+  return clean !== '/' ? clean.replace(/\/$/, '') : '/';
+}
+
+const normalizedCurrentPath = normalizePath(currentPath);
+
+function isActivePath(path) {
+  const normalizedItemPath = normalizePath(path);
+
+  if (normalizedItemPath === '/') {
+    return normalizedCurrentPath === '/';
+  }
+
+  return (
+    normalizedCurrentPath === normalizedItemPath ||
+    normalizedCurrentPath.startsWith(`${normalizedItemPath}/`)
+  );
+}
+
+function getNavLabel(key) {
+  if (key === 'nav.home') {
+    return lang === 'es' ? 'Inicio' : lang === 'en' ? 'Home' : 'Startseite';
+  }
+
+  return t(key);
+}
+
+const flags = {
+  es: '🇪🇸',
+  en: '🇬🇧',
+  de: '🇩🇪',
+};
+---
+
+<header id="site-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+  <div class="container-premium py-5 md:py-6">
+    <div class="header-shell relative flex items-center justify-center">
+      <a
+        href={getLocalePath('/', lang)}
+        class="header-brand absolute left-0 top-1/2 -translate-y-1/2 z-50 flex items-center text-white no-underline transition-all duration-500"
+        aria-label="Izquierdo y de la Cueva - Inicio"
+      >
+        <img
+          src="/images/logo-idlc-white.svg"
+          alt="Izquierdo y de la Cueva"
+          class="header-logo h-8 md:h-10 w-auto"
+        />
+      </a>
+
+      <div class="desktop-nav hidden lg:flex items-center justify-center text-white transition-all duration-500">
+        <nav class="desktop-nav-list flex items-center gap-8" aria-label="Navegación principal">
+          {navItems.map((item) => (
+            item.hasDropdown ? (
+              <div class="nav-dropdown-group relative">
+                <a
+                  href={getLocalePath(item.path, lang)}
+                  class:list={[
+                    'nav-link inline-flex items-center gap-1 text-[14px] tracking-[0.24em] uppercase transition-colors duration-300 no-underline whitespace-nowrap',
+                    isActivePath(item.path) ? 'text-brand-200' : 'text-white/88 hover:text-white'
+                  ]}
+                >
+                  {getNavLabel(item.key)}
+                  <span class="text-white/45 text-sm">⌄</span>
+                </a>
+
+                <div class="areas-dropdown absolute left-1/2 top-full w-[410px] -translate-x-1/2 pt-4 opacity-0 invisible translate-y-2 transition-all duration-300">
+                  <div class="bg-white text-ink shadow-2xl border border-black/10 p-3">
+                    <a
+                      href={getLocalePath('/areas/', lang)}
+                      class="flex items-center gap-3 px-4 py-3 text-[11px] uppercase tracking-[0.22em] text-brand-700 no-underline hover:bg-brand-50 transition-colors"
+                    >
+                      <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-brand-500/20 text-brand-600">
+                        <svg
+                          width="17"
+                          height="17"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.45"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                      </span>
+
+                      <span>
+                        {lang === 'es'
+                          ? 'Ver todas las áreas'
+                          : lang === 'en'
+                          ? 'View all areas'
+                          : 'Alle Rechtsgebiete'}
+                      </span>
+                    </a>
+
+                    <div class="h-px bg-black/10 my-2"></div>
+
+                    {areas.map((area) => (
+                      <a
+                        href={getLocalePath(`/areas/${area.slug}/`, lang)}
+                        class="flex items-center gap-3 px-4 py-3 text-[15px] leading-tight text-ink/78 no-underline hover:text-brand-700 hover:bg-brand-50 transition-colors"
+                      >
+                        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-brand-500/20 text-brand-600">
+                          <svg
+                            width="19"
+                            height="19"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.45"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                          >
+                            <path d={area.icon}></path>
+                          </svg>
+                        </span>
+
+                        <span>
+                          {area.title?.[lang] || area.title?.es}
+                        </span>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <a
+                href={getLocalePath(item.path, lang)}
+                class:list={[
+                  'nav-link text-[14px] tracking-[0.24em] uppercase transition-colors duration-300 no-underline whitespace-nowrap',
+                  isActivePath(item.path) ? 'text-brand-200' : 'text-white/88 hover:text-white'
+                ]}
+              >
+                {getNavLabel(item.key)}
+              </a>
+            )
+          ))}
+        </nav>
+      </div>
+
+      <div class="language-switcher hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 z-50">
+        <button type="button" class="flex items-center gap-2 cursor-pointer select-none text-white">
+          <span class="text-xl">{flags[lang]}</span>
+          <span class="text-white/60 text-sm">⌄</span>
+        </button>
+
+        <div class="language-menu absolute right-0 top-full pt-4 min-w-[142px] opacity-0 invisible translate-y-2 transition-all duration-300">
+          <div class="bg-white text-ink shadow-2xl border border-black/10 py-2">
+            {Object.entries(languages).map(([code, name]) => (
+              <a
+                href={getLocalePath(cleanPath, code)}
+                class="flex items-center gap-3 px-4 py-2 text-sm no-underline text-ink/75 hover:text-brand-700 hover:bg-brand-50 transition-colors"
+              >
+                <span>{flags[code]}</span>
+                <span>{name}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <button
+        id="mobile-menu-btn"
+        class="lg:hidden relative z-50 w-11 h-11 flex flex-col items-center justify-center gap-1.5 ml-auto"
+        aria-label="Abrir menú"
+        aria-expanded="false"
+      >
+        <span class="hamburger-line w-7 h-px bg-white transition-all duration-300"></span>
+        <span class="hamburger-line w-7 h-px bg-white transition-all duration-300"></span>
+        <span class="hamburger-line w-7 h-px bg-white transition-all duration-300"></span>
+      </button>
+    </div>
+  </div>
+
+  <div id="mobile-menu" class="fixed inset-0 bg-[#0A1620] z-40 flex flex-col justify-center items-center opacity-0 pointer-events-none transition-opacity duration-400 overflow-y-auto py-16">
+    <nav class="flex flex-col items-center gap-7" aria-label="Menú móvil">
+      {navItems.map((item) => (
+        item.hasDropdown ? (
+          <div class="flex flex-col items-center gap-4">
+            <a
+              href={getLocalePath(item.path, lang)}
+              class:list={[
+                'text-white/80 text-4xl tracking-[-0.06em] hover:text-brand-200 transition-colors no-underline',
+                isActivePath(item.path) ? 'text-brand-200' : ''
+              ]}
+            >
+              {getNavLabel(item.key)}
+            </a>
+
+            <div class="grid grid-cols-1 gap-3">
+              {areas.map((area) => (
+                <a
+                  href={getLocalePath(`/areas/${area.slug}/`, lang)}
+                  class="flex items-center gap-3 text-white/55 text-base no-underline hover:text-white transition-colors"
+                >
+                  <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/15 text-white/70">
+                    <svg
+                      width="17"
+                      height="17"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.45"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d={area.icon}></path>
+                    </svg>
+                  </span>
+
+                  <span>
+                    {area.title?.[lang] || area.title?.es}
+                  </span>
+                </a>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <a
+            href={getLocalePath(item.path, lang)}
+            class:list={[
+              'text-white/80 text-4xl tracking-[-0.06em] hover:text-brand-200 transition-colors no-underline',
+              isActivePath(item.path) ? 'text-brand-200' : ''
+            ]}
+          >
+            {getNavLabel(item.key)}
+          </a>
+        )
+      ))}
+
+      <div class="flex items-center gap-5 mt-7 pt-7 border-t border-white/10">
+        {Object.entries(languages).map(([code, name]) => (
+          <a href={getLocalePath(cleanPath, code)} class="text-white/60 hover:text-white no-underline">
+            {flags[code]} {name}
+          </a>
+        ))}
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  #site-header {
+    background: linear-gradient(
+      to bottom,
+      rgba(12, 38, 56, 0.24),
+      rgba(12, 38, 56, 0.10),
+      transparent
+    );
+  }
+
+  .header-shell {
+    min-height: 44px;
+    justify-content: center;
+  }
+
+  .header-logo {
+    max-width: min(300px, 24vw);
+  }
+
+  #site-header .header-brand {
+    opacity: 0;
+    transform: translateY(-50%) translateY(-8px);
+    pointer-events: none;
+  }
+
+  #site-header .desktop-nav {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  #site-header.scrolled,
+  #site-header.menu-open {
+    background: rgba(13, 42, 62, 0.94);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  #site-header.scrolled .header-brand,
+  #site-header.menu-open .header-brand {
+    opacity: 1;
+    transform: translateY(-50%);
+    pointer-events: auto;
+  }
+
+  #site-header.scrolled .desktop-nav {
+    left: 300px;
+    right: 86px;
+    transform: none;
+    justify-content: flex-end;
+  }
+
+  #site-header.scrolled .desktop-nav-list {
+    gap: 1.75rem;
+  }
+
+  .nav-dropdown-group:hover .areas-dropdown,
+  .nav-dropdown-group:focus-within .areas-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .language-switcher:hover .language-menu,
+  .language-switcher:focus-within .language-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  #mobile-menu-btn.active .hamburger-line:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  #mobile-menu-btn.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+  }
+
+  #mobile-menu-btn.active .hamburger-line:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  #mobile-menu.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  @media (max-width: 1500px) {
+    .header-logo {
+      max-width: min(260px, 22vw);
+    }
+
+    #site-header.scrolled .desktop-nav {
+      left: 260px;
+      right: 78px;
+    }
+
+    #site-header.scrolled .desktop-nav-list {
+      gap: 1.35rem;
+    }
+
+    #site-header.scrolled .desktop-nav a {
+      font-size: 13px;
+      letter-spacing: 0.20em;
+    }
+  }
+
+  @media (max-width: 1280px) {
+    .header-logo {
+      max-width: min(220px, 20vw);
+    }
+
+    #site-header.scrolled .desktop-nav {
+      left: 220px;
+      right: 72px;
+    }
+
+    #site-header.scrolled .desktop-nav-list {
+      gap: 1.05rem;
+    }
+
+    #site-header.scrolled .desktop-nav a {
+      font-size: 12px;
+      letter-spacing: 0.16em;
+    }
+  }
+
+  @media (max-width: 1120px) {
+    #site-header.scrolled .header-brand {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #site-header.scrolled .desktop-nav {
+      left: 50%;
+      right: auto;
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (max-width: 1023px) {
+    .header-shell {
+      justify-content: space-between;
+    }
+
+    #site-header .header-brand {
+      opacity: 1;
+      transform: translateY(-50%);
+      pointer-events: auto;
+    }
+
+    .header-logo {
+      max-width: 270px;
+    }
+  }
+</style>
+
+<script>
+  const header = document.getElementById('site-header');
+
+  function updateHeader() {
+    if (window.scrollY > 120) {
+      header?.classList.add('scrolled');
+    } else {
+      header?.classList.remove('scrolled');
+    }
+  }
+
+  window.addEventListener('scroll', updateHeader, { passive: true });
+  window.addEventListener('resize', updateHeader, { passive: true });
+  updateHeader();
+
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  menuBtn?.addEventListener('click', () => {
+    const isActive = menuBtn.classList.toggle('active');
+    mobileMenu?.classList.toggle('active');
+    header?.classList.toggle('menu-open', isActive);
+    document.body.style.overflow = isActive ? 'hidden' : '';
+    menuBtn.setAttribute('aria-expanded', String(isActive));
+  });
+</script>

@@ -1,0 +1,120 @@
+---
+import BaseLayout from '../../../layouts/Base.astro';
+import PageHero from '../../../components/PageHero.astro';
+import CTASection from '../../../components/CTASection.astro';
+import { getLocalePath } from '../../../i18n/translations';
+import { areas } from '../../../data/areas.js';
+
+export function getStaticPaths() {
+  return ['es', 'en', 'de'].map((lang) => ({
+    params: { lang },
+    props: { lang },
+  }));
+}
+
+const { lang } = Astro.props;
+
+const copy = {
+  es: {
+    metaTitle: 'Áreas de trabajo | Izquierdo y de la Cueva',
+    metaDescription: 'Áreas legales de Izquierdo y de la Cueva Abogados en Lanzarote.',
+    label: 'Izquierdo y de la Cueva',
+    title: 'Áreas de trabajo',
+    intro:
+      'Trabajamos en las principales áreas legales que afectan a particulares, empresas, propietarios e inversores en Lanzarote.',
+    readMore: 'Leer más',
+  },
+  en: {
+    metaTitle: 'Practice areas | Izquierdo y de la Cueva',
+    metaDescription: 'Legal practice areas of Izquierdo y de la Cueva Lawyers in Lanzarote.',
+    label: 'Izquierdo y de la Cueva',
+    title: 'Practice areas',
+    intro:
+      'We work across the main legal areas affecting individuals, companies, property owners and investors in Lanzarote.',
+    readMore: 'Read more',
+  },
+  de: {
+    metaTitle: 'Tätigkeitsbereiche | Izquierdo y de la Cueva',
+    metaDescription: 'Rechtsgebiete von Izquierdo y de la Cueva Rechtsanwälte auf Lanzarote.',
+    label: 'Izquierdo y de la Cueva',
+    title: 'Tätigkeitsbereiche',
+    intro:
+      'Wir beraten in den wichtigsten Rechtsgebieten für Privatpersonen, Unternehmen, Eigentümer und Investoren auf Lanzarote.',
+    readMore: 'Mehr lesen',
+  },
+};
+
+const t = copy[lang] || copy.es;
+---
+
+<BaseLayout
+  title={t.metaTitle}
+  description={t.metaDescription}
+  lang={lang}
+>
+  <PageHero
+    label={t.label}
+    title={t.title}
+    intro={t.intro}
+    image="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1800&q=80"
+  />
+
+  <section class="bg-[#F3F9FD] text-ink py-section">
+    <div class="container-premium">
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5" data-animate>
+        {areas.map((area) => (
+          <a
+            href={getLocalePath(`/areas/${area.slug}/`, lang)}
+            class="group bg-white border border-black/10 rounded-[18px] overflow-hidden no-underline transition-all duration-400 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(17,17,17,.10)]"
+          >
+            <div class="relative aspect-[21/9] overflow-hidden bg-brand-900">
+              <img
+                src={area.image}
+                alt={area.title[lang] || area.title.es}
+                loading="lazy"
+                class="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
+              />
+
+              <div class="absolute inset-0 bg-[#06121C]/16 transition duration-400 group-hover:bg-[#06121C]/8"></div>
+              <div class="absolute inset-x-0 bottom-0 h-[45%] bg-gradient-to-t from-[#06121C]/36 via-[#06121C]/10 to-transparent"></div>
+
+              <div class="absolute left-5 bottom-5 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/18 bg-white/10 text-white backdrop-blur-sm">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="20"
+                  height="20"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.55"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d={area.icon}></path>
+                </svg>
+              </div>
+            </div>
+
+            <div class="p-6 md:p-7 min-h-[245px] flex flex-col">
+              <h2 class="text-[1.45rem] md:text-[1.65rem] leading-tight tracking-[-0.055em] text-ink">
+                {area.title[lang] || area.title.es}
+              </h2>
+
+              <p class="mt-4 text-[14.5px] leading-relaxed text-muted">
+                {area.summary[lang] || area.summary.es}
+              </p>
+
+              <div class="mt-auto pt-6">
+                <span class="inline-flex w-full items-center justify-center px-5 py-3.5 bg-brand-800 text-white text-[12px] uppercase tracking-[0.18em] transition-all duration-400 group-hover:bg-brand-600">
+                  {t.readMore}
+                </span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTASection lang={lang} />
+</BaseLayout>

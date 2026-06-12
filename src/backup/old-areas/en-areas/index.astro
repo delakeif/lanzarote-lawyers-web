@@ -1,0 +1,26 @@
+---
+import Base from '../../../layouts/Base.astro';
+import AreasSection from '../../../components/AreasSection.astro';
+import CTASection from '../../../components/CTASection.astro';
+
+export const prerender = true;
+---
+
+<Base
+  title="Practice Areas — Izquierdo y de la Cueva"
+  description="Real estate, corporate, administrative law, litigation, holiday rentals and more. Multilingual lawyers in Lanzarote."
+>
+  <section class="relative bg-[#06121C] text-white pt-36 pb-20 md:pt-40 md:pb-24 overflow-hidden">
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1920&q=60')] bg-cover bg-center opacity-15"></div>
+    <div class="relative container-premium">
+      <span class="section-label text-white/60">Izquierdo y de la Cueva</span>
+      <h1 class="text-heading mt-5 text-white max-w-3xl">Practice Areas</h1>
+      <p class="mt-6 text-lg text-white/60 max-w-2xl leading-relaxed">
+        We work across the main legal areas affecting individuals, companies, property owners and investors in Lanzarote.
+      </p>
+    </div>
+  </section>
+
+  <AreasSection lang="en" />
+  <CTASection lang="en" />
+</Base>

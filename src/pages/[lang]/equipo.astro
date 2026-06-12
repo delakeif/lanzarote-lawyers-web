@@ -1,0 +1,107 @@
+---
+import BaseLayout from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import { getLocalePath } from '../../i18n/translations';
+import { teamMembers, teamPageCopy } from '../../data/team';
+
+export function getStaticPaths() {
+  return ['es', 'en', 'de'].map((lang) => ({
+    params: { lang },
+    props: { lang },
+  }));
+}
+
+const { lang } = Astro.props;
+const t = teamPageCopy[lang] || teamPageCopy.es;
+
+const viewProfile = {
+  es: 'Ver perfil',
+  en: 'View profile',
+  de: 'Profil ansehen',
+};
+---
+
+<BaseLayout
+  title={t.metaTitle}
+  description={t.metaDescription}
+  lang={lang}
+>
+  <PageHero
+    label={t.label}
+    title={t.title}
+    intro={t.intro}
+    image="/images/hero-team.webp"
+  />
+
+  <section class="bg-[#F3F9FD] text-ink py-section">
+    <div class="container-premium">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 xl:gap-6" data-animate>
+        {teamMembers.map((member) => (
+          <a
+            href={getLocalePath(`/equipo/${member.slug}/`, lang)}
+            class="team-directory-card group relative block aspect-[4/5] overflow-hidden bg-[#06121C] no-underline"
+            aria-label={member.name}
+          >
+            <img
+              src={member.image}
+              alt={member.name}
+              loading="lazy"
+              class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.035]"
+            />
+
+            <div class="absolute inset-0 bg-black/5"></div>
+            <div class="absolute inset-x-0 bottom-0 h-[72%] bg-gradient-to-t from-black via-black/72 via-35% to-transparent"></div>
+
+            <div class="absolute inset-x-0 bottom-0 z-10 p-5 md:p-6">
+              <span class="inline-flex items-center border border-white/80 bg-black/24 px-3.5 py-2 text-[10px] uppercase tracking-[0.30em] text-white shadow-[0_8px_24px_rgba(0,0,0,.45)] backdrop-blur-[2px]">
+                {member.role[lang] || member.role.es}
+              </span>
+
+              <h2 class="mt-5 text-[clamp(1.55rem,1.85vw,2.25rem)] leading-[0.96] tracking-[-0.075em] text-white [text-shadow:0_5px_24px_rgba(0,0,0,.95)]">
+                {member.name}
+              </h2>
+
+              <p class="mt-5 text-[10px] uppercase tracking-[0.28em] text-white/18 transition-colors duration-300 group-hover:text-white/55">
+                {viewProfile[lang] || viewProfile.es}
+              </p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .team-directory-card {
+    min-height: 0;
+    max-height: 520px;
+    box-shadow: 0 24px 80px rgba(17, 17, 17, 0.08);
+    transition:
+      transform 0.45s ease,
+      box-shadow 0.45s ease;
+  }
+
+  .team-directory-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 34px 100px rgba(17, 17, 17, 0.14);
+  }
+
+  @media (max-width: 1279px) {
+    .team-directory-card {
+      max-height: 500px;
+    }
+  }
+
+  @media (max-width: 1023px) {
+    .team-directory-card {
+      max-height: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .team-directory-card {
+      aspect-ratio: 4 / 5.2;
+    }
+  }
+</style>

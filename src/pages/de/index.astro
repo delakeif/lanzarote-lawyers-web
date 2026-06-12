@@ -1,0 +1,20 @@
+---
+import Base from '../../layouts/Base.astro';
+import HeroSection from '../../components/HeroSection.astro';
+import AboutSection from '../../components/AboutSection.astro';
+import AreasSection from '../../components/AreasSection.astro';
+import NewsSection from '../../components/NewsSection.astro';
+import CTASection from '../../components/CTASection.astro';
+import TeamSlider from '../../components/TeamSlider.astro';
+
+export const prerender = true;
+---
+
+<Base>
+  <HeroSection lang="de" />
+  <AboutSection lang="de" />
+  <AreasSection lang="de" />
+  <TeamSlider lang="de" />
+  <CTASection lang="de" />
+  <NewsSection lang="de" />
+</Base>

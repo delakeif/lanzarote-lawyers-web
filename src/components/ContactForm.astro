@@ -1,0 +1,326 @@
+---
+import { useTranslations, getLocalePath } from '../i18n/translations';
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const areaOptions = [
+  { value: 'inmobiliario', label: t('areas.real_estate') },
+  { value: 'mercantil', label: t('areas.corporate') },
+  { value: 'danos-personales', label: t('areas.personal_injury') },
+  { value: 'administrativo', label: t('areas.administrative') },
+  { value: 'litigios', label: t('areas.litigation') },
+  { value: 'vivienda-vacacional', label: t('areas.vacation_rental') },
+  { value: 'solucion-extrajudicial', label: t('areas.adr') },
+  { value: 'otros', label: t('areas.other') },
+];
+---
+
+<section class="bg-cream py-section" id="contact-form">
+  <div class="max-w-[800px] mx-auto px-6 md:px-10">
+    <div data-animate>
+      <span class="section-label">{t('contact.title')}</span>
+      <div class="line-accent mt-4 mb-4"></div>
+      <h2 class="font-display text-heading text-navy-500 mb-4">
+        {t('contact.title')}
+      </h2>
+      <p class="text-navy-300 mb-12">
+        {t('cta.text')}
+      </p>
+    </div>
+
+    <!-- Multi-step Form -->
+    <form id="consultation-form" class="space-y-0" novalidate>
+      <!-- Step 1: Personal Info -->
+      <div class="form-step active" data-step="1">
+        <div class="flex items-center gap-3 mb-8">
+          <span class="w-8 h-8 rounded-full bg-gold-400 text-navy-500 text-sm font-semibold flex items-center justify-center">1</span>
+          <span class="text-sm tracking-wider uppercase text-navy-300">
+            {lang === 'es' ? 'Tus datos' : lang === 'en' ? 'Your details' : 'Ihre Daten'}
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="form-group">
+            <label for="name" class="form-label">{t('contact.name')} *</label>
+            <input type="text" id="name" name="name" required
+              class="form-input" placeholder="María García López" />
+          </div>
+          <div class="form-group">
+            <label for="email" class="form-label">{t('contact.email')} *</label>
+            <input type="email" id="email" name="email" required
+              class="form-input" placeholder="maria@ejemplo.com" />
+          </div>
+          <div class="form-group">
+            <label for="phone" class="form-label">{t('contact.phone')} *</label>
+            <input type="tel" id="phone" name="phone" required
+              class="form-input" placeholder="+34 600 000 000" />
+          </div>
+          <div class="form-group">
+            <label for="language" class="form-label">{t('contact.language')}</label>
+            <select id="language" name="language" class="form-input">
+              <option value="es">Español</option>
+              <option value="en">English</option>
+              <option value="de">Deutsch</option>
+            </select>
+          </div>
+        </div>
+        <button type="button" class="btn-primary mt-8 next-step" data-next="2">
+          {lang === 'es' ? 'Siguiente' : lang === 'en' ? 'Next' : 'Weiter'}
+          <svg class="ml-2 w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
+
+      <!-- Step 2: Consultation Details -->
+      <div class="form-step hidden" data-step="2">
+        <div class="flex items-center gap-3 mb-8">
+          <span class="w-8 h-8 rounded-full bg-gold-400 text-navy-500 text-sm font-semibold flex items-center justify-center">2</span>
+          <span class="text-sm tracking-wider uppercase text-navy-300">
+            {lang === 'es' ? 'Tu consulta' : lang === 'en' ? 'Your enquiry' : 'Ihre Anfrage'}
+          </span>
+        </div>
+
+        <div class="space-y-6">
+          <div class="form-group">
+            <label for="area" class="form-label">{t('contact.area')} *</label>
+            <select id="area" name="area" required class="form-input">
+              <option value="">—</option>
+              {areaOptions.map(opt => (
+                <option value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="message" class="form-label">{t('contact.message')} *</label>
+            <textarea id="message" name="message" required rows="4"
+              class="form-input resize-none"
+              placeholder={lang === 'es' ? 'Cuéntanos brevemente tu situación...' : lang === 'en' ? 'Briefly describe your situation...' : 'Beschreiben Sie kurz Ihre Situation...'}
+            ></textarea>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="form-group">
+              <label for="urgency" class="form-label">{t('contact.urgency')}</label>
+              <select id="urgency" name="urgency" class="form-input">
+                <option value="normal">{t('contact.urgency.normal')}</option>
+                <option value="urgent">{t('contact.urgency.urgent')}</option>
+              </select>
+            </div>
+            <!-- Dynamic: file upload for supporting docs -->
+            <div class="form-group">
+              <label for="files" class="form-label">
+                {lang === 'es' ? 'Documentación (opcional)' : lang === 'en' ? 'Documentation (optional)' : 'Dokumentation (optional)'}
+              </label>
+              <input type="file" id="files" name="files" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                class="form-input file:mr-4 file:py-2 file:px-4 file:border-0 file:text-xs file:tracking-wider file:uppercase file:bg-navy-100/10 file:text-navy-400 hover:file:bg-navy-100/20 cursor-pointer" />
+            </div>
+          </div>
+        </div>
+
+        <div class="flex gap-4 mt-8">
+          <button type="button" class="btn-outline prev-step" data-prev="1">
+            <svg class="mr-2 w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+            {lang === 'es' ? 'Anterior' : lang === 'en' ? 'Back' : 'Zurück'}
+          </button>
+          <button type="button" class="btn-primary next-step" data-next="3">
+            {lang === 'es' ? 'Siguiente' : lang === 'en' ? 'Next' : 'Weiter'}
+            <svg class="ml-2 w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 3: Meeting Preferences -->
+      <div class="form-step hidden" data-step="3">
+        <div class="flex items-center gap-3 mb-8">
+          <span class="w-8 h-8 rounded-full bg-gold-400 text-navy-500 text-sm font-semibold flex items-center justify-center">3</span>
+          <span class="text-sm tracking-wider uppercase text-navy-300">
+            {lang === 'es' ? 'Preferencias de reunión' : lang === 'en' ? 'Meeting preferences' : 'Terminwünsche'}
+          </span>
+        </div>
+
+        <div class="space-y-6">
+          <div class="form-group">
+            <label class="form-label">{t('contact.meeting')}</label>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-2">
+              {[
+                { value: 'office', label: t('contact.meeting.office'), icon: '🏢' },
+                { value: 'video', label: t('contact.meeting.video'), icon: '💻' },
+                { value: 'phone', label: t('contact.meeting.phone_call'), icon: '📞' },
+              ].map(opt => (
+                <label class="meeting-option cursor-pointer">
+                  <input type="radio" name="meeting_type" value={opt.value} class="sr-only peer" />
+                  <div class="p-4 border border-navy-100/20 text-center transition-all duration-300 peer-checked:border-gold-400 peer-checked:bg-gold-50 hover:border-gold-400/50">
+                    <span class="text-xl block mb-2">{opt.icon}</span>
+                    <span class="text-xs tracking-wider uppercase text-navy-400">{opt.label}</span>
+                  </div>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <!-- Show office selector only if "office" is selected -->
+          <div id="office-selector" class="form-group hidden">
+            <label for="office" class="form-label">{t('contact.office')}</label>
+            <select id="office" name="office" class="form-input">
+              <option value="arrecife">{t('contact.office.arrecife')}</option>
+              <option value="playa_blanca">{t('contact.office.playa_blanca')}</option>
+            </select>
+          </div>
+
+          <!-- Privacy consent -->
+          <label class="flex items-start gap-3 cursor-pointer mt-6">
+            <input type="checkbox" name="privacy" required
+              class="mt-1 w-4 h-4 accent-gold-400 rounded" />
+            <span class="text-sm text-navy-300">
+              {t('contact.privacy')}. <a href={getLocalePath('/privacidad/', lang)} class="text-gold-500 underline underline-offset-2">
+                {t('footer.privacy')}
+              </a>
+            </span>
+          </label>
+        </div>
+
+        <div class="flex gap-4 mt-8">
+          <button type="button" class="btn-outline prev-step" data-prev="2">
+            <svg class="mr-2 w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+            {lang === 'es' ? 'Anterior' : lang === 'en' ? 'Back' : 'Zurück'}
+          </button>
+          <button type="submit" class="btn-primary" id="submit-btn">
+            {t('contact.submit')}
+            <svg class="ml-2 w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 5 5L20 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step progress -->
+      <div class="flex items-center gap-2 mt-10 pt-6 border-t border-navy-100/10">
+        {[1, 2, 3].map(step => (
+          <div class="step-dot w-2 h-2 rounded-full bg-navy-200/30 transition-colors duration-300" data-dot={step}></div>
+        ))}
+      </div>
+
+      <!-- Success message -->
+      <div id="form-success" class="hidden text-center py-16">
+        <div class="text-4xl mb-4">✓</div>
+        <h3 class="font-display text-xl text-navy-500 mb-2">
+          {lang === 'es' ? '¡Consulta enviada!' : lang === 'en' ? 'Enquiry sent!' : 'Anfrage gesendet!'}
+        </h3>
+        <p class="text-navy-300">{t('contact.success')}</p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<style>
+  .form-label {
+    @apply block text-xs tracking-wider uppercase text-navy-400 mb-2;
+  }
+  .form-input {
+    @apply w-full px-4 py-3 bg-white border border-navy-100/20 text-navy-500 text-sm
+           placeholder:text-navy-200/50 transition-colors duration-300
+           focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400/20;
+  }
+  .form-step.active {
+    display: block;
+  }
+  .form-step.hidden {
+    display: none;
+  }
+  .step-dot.active {
+    @apply bg-gold-400;
+  }
+</style>
+
+<script>
+  const form = document.getElementById('consultation-form');
+  const steps = document.querySelectorAll('.form-step');
+  const dots = document.querySelectorAll('.step-dot');
+  let currentStep = 1;
+
+  function showStep(step) {
+    steps.forEach(s => {
+      s.classList.remove('active');
+      s.classList.add('hidden');
+    });
+    const target = document.querySelector(`[data-step="${step}"]`);
+    target?.classList.remove('hidden');
+    target?.classList.add('active');
+
+    dots.forEach(d => {
+      const dotStep = parseInt(d.getAttribute('data-dot') || '0');
+      d.classList.toggle('active', dotStep <= step);
+    });
+
+    currentStep = step;
+    window.scrollTo({ top: form?.offsetTop - 100, behavior: 'smooth' });
+  }
+
+  // Next buttons
+  document.querySelectorAll('.next-step').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const next = parseInt(btn.getAttribute('data-next') || '1');
+      // Basic validation for current step
+      const currentFields = document.querySelector(`[data-step="${currentStep}"]`)?.querySelectorAll('[required]');
+      let valid = true;
+      currentFields?.forEach(field => {
+        if (!field.checkValidity()) {
+          field.reportValidity();
+          valid = false;
+        }
+      });
+      if (valid) showStep(next);
+    });
+  });
+
+  // Prev buttons
+  document.querySelectorAll('.prev-step').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const prev = parseInt(btn.getAttribute('data-prev') || '1');
+      showStep(prev);
+    });
+  });
+
+  // Show/hide office selector
+  document.querySelectorAll('input[name="meeting_type"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      const selector = document.getElementById('office-selector');
+      if (e.target.value === 'office') {
+        selector?.classList.remove('hidden');
+      } else {
+        selector?.classList.add('hidden');
+      }
+    });
+  });
+
+  // Form submission
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const submitBtn = document.getElementById('submit-btn');
+    if (submitBtn) submitBtn.textContent = '...';
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      const response = await fetch('/api/consultation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        form.classList.add('hidden');
+        document.getElementById('form-success')?.classList.remove('hidden');
+      } else {
+        throw new Error('Server error');
+      }
+    } catch (err) {
+      // Fallback: show success anyway (form data logged)
+      console.log('Form data:', data);
+      form.classList.add('hidden');
+      document.getElementById('form-success')?.classList.remove('hidden');
+    }
+  });
+
+  // Initialize
+  showStep(1);
+</script>

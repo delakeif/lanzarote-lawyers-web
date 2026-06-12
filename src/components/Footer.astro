@@ -1,0 +1,66 @@
+---
+import { useTranslations, getLocalePath } from '../i18n/translations';
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<footer class="bg-[#0D2A3E] text-white">
+  <div class="container-premium py-20 md:py-24">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-14 lg:gap-16">
+      
+      <div class="lg:col-span-6">
+        <img src="/images/logo-idlc-white.svg" alt="Izquierdo y de la Cueva" class="h-11 md:h-12 w-auto mb-8" />
+
+        <p class="max-w-2xl text-white/62 text-[15px] leading-relaxed">
+          {lang === 'es'
+            ? 'Despacho de abogados en Lanzarote con experiencia en asesoramiento jurídico para clientes nacionales e internacionales.'
+            : lang === 'en'
+            ? 'Law firm in Lanzarote with experience in legal advice for national and international clients.'
+            : 'Kanzlei auf Lanzarote mit Erfahrung in der Rechtsberatung nationaler und internationaler Mandanten.'}
+        </p>
+      </div>
+
+      <div class="lg:col-span-2">
+        <h4 class="text-white text-[11px] uppercase tracking-[0.28em] mb-6">
+          Enlaces
+        </h4>
+
+        <nav class="space-y-4 text-[15px]">
+          <a href={getLocalePath('/', lang)} class="block text-white/72 hover:text-white transition-colors no-underline">{t('nav.home')}</a>
+          <a href={getLocalePath('/noticias/', lang)} class="block text-white/72 hover:text-white transition-colors no-underline">{t('nav.news')}</a>
+          <a href={getLocalePath('/contactar/', lang)} class="block text-white/72 hover:text-white transition-colors no-underline">{t('nav.contact')}</a>
+        </nav>
+      </div>
+
+      <div class="lg:col-span-2">
+        <h4 class="text-white text-[11px] uppercase tracking-[0.28em] mb-6">
+          Legal
+        </h4>
+
+        <nav class="space-y-4 text-[15px]">
+          <a href={getLocalePath('/legal/', lang)} class="block text-white/72 hover:text-white transition-colors no-underline">{t('footer.legal')}</a>
+          <a href={getLocalePath('/cookies/', lang)} class="block text-white/72 hover:text-white transition-colors no-underline">{t('footer.cookies')}</a>
+          <a href={getLocalePath('/privacidad/', lang)} class="block text-white/72 hover:text-white transition-colors no-underline">{t('footer.privacy')}</a>
+        </nav>
+      </div>
+
+      <div class="lg:col-span-2">
+        <h4 class="text-white text-[11px] uppercase tracking-[0.28em] mb-6">
+          Contacto
+        </h4>
+
+        <div class="space-y-4 text-[15px] text-white/72 leading-relaxed">
+          <p>Arrecife · Lanzarote</p>
+          <p>Playa Blanca · Lanzarote</p>
+          <p>+34 928 801 056</p>
+          <p>
+            <a href="mailto:info@lanzarotelawyers.com" class="text-white/72 hover:text-white transition-colors no-underline break-all">
+              info@lanzarotelawyers.com
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

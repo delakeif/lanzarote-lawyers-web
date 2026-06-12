@@ -1,0 +1,116 @@
+backend:
+  name: git-gateway
+  branch: main
+
+# Media files stored in public/images
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+# Locale for the CMS UI
+locale: "es"
+
+# Enable editorial workflow (draft → review → ready → published)
+publish_mode: editorial_workflow
+
+collections:
+  # ============ BLOG POSTS (Spanish) ============
+  - name: "blog-es"
+    label: "📰 Noticias (Español)"
+    folder: "src/content/blog/es"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    fields:
+      - { label: "Título", name: "title", widget: "string" }
+      - { label: "Fecha", name: "date", widget: "datetime" }
+      - { label: "Extracto", name: "excerpt", widget: "text" }
+      - { label: "Imagen destacada", name: "image", widget: "image", required: false }
+      - { label: "Área de práctica", name: "area", widget: "select", options: ["inmobiliario", "mercantil", "danos-personales", "administrativo", "litigios", "vivienda-vacacional", "solucion-extrajudicial", "otros"], required: false }
+      - { label: "Autor", name: "author", widget: "string", required: false }
+      - { label: "Contenido", name: "body", widget: "markdown" }
+
+  # ============ BLOG POSTS (English) ============
+  - name: "blog-en"
+    label: "📰 News (English)"
+    folder: "src/content/blog/en"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime" }
+      - { label: "Excerpt", name: "excerpt", widget: "text" }
+      - { label: "Featured Image", name: "image", widget: "image", required: false }
+      - { label: "Practice Area", name: "area", widget: "select", options: ["real-estate", "corporate", "personal-injury", "administrative", "litigation", "holiday-rentals", "adr", "other"], required: false }
+      - { label: "Author", name: "author", widget: "string", required: false }
+      - { label: "Content", name: "body", widget: "markdown" }
+
+  # ============ BLOG POSTS (German) ============
+  - name: "blog-de"
+    label: "📰 Nachrichten (Deutsch)"
+    folder: "src/content/blog/de"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    fields:
+      - { label: "Titel", name: "title", widget: "string" }
+      - { label: "Datum", name: "date", widget: "datetime" }
+      - { label: "Auszug", name: "excerpt", widget: "text" }
+      - { label: "Beitragsbild", name: "image", widget: "image", required: false }
+      - { label: "Rechtsgebiet", name: "area", widget: "select", options: ["immobilienrecht", "handelsrecht", "personenschaeden", "verwaltungsrecht", "prozessfuehrung", "ferienwohnungen", "streitbeilegung", "sonstiges"], required: false }
+      - { label: "Autor", name: "author", widget: "string", required: false }
+      - { label: "Inhalt", name: "body", widget: "markdown" }
+
+  # ============ TEAM MEMBERS ============
+  - name: "team"
+    label: "👥 Equipo"
+    folder: "src/content/team"
+    create: true
+    slug: "{{slug}}"
+    extension: "json"
+    fields:
+      - { label: "Nombre", name: "name", widget: "string" }
+      - { label: "Cargo (ES)", name: "role_es", widget: "string" }
+      - { label: "Role (EN)", name: "role_en", widget: "string" }
+      - { label: "Rolle (DE)", name: "role_de", widget: "string" }
+      - { label: "Foto", name: "photo", widget: "image" }
+      - { label: "Biografía (ES)", name: "bio_es", widget: "text", required: false }
+      - { label: "Biography (EN)", name: "bio_en", widget: "text", required: false }
+      - { label: "Biografie (DE)", name: "bio_de", widget: "text", required: false }
+      - { label: "Email", name: "email", widget: "string", required: false }
+      - { label: "Orden", name: "sort_order", widget: "number", default: 0 }
+
+  # ============ PAGES (Legal) ============
+  - name: "legal"
+    label: "📄 Páginas legales"
+    files:
+      - label: "Aviso Legal (ES)"
+        name: "aviso-legal-es"
+        file: "src/content/legal/aviso-legal-es.md"
+        fields:
+          - { label: "Título", name: "title", widget: "string" }
+          - { label: "Contenido", name: "body", widget: "markdown" }
+      - label: "Legal Notice (EN)"
+        name: "legal-notice-en"
+        file: "src/content/legal/legal-notice-en.md"
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Content", name: "body", widget: "markdown" }
+      - label: "Impressum (DE)"
+        name: "impressum-de"
+        file: "src/content/legal/impressum-de.md"
+        fields:
+          - { label: "Titel", name: "title", widget: "string" }
+          - { label: "Inhalt", name: "body", widget: "markdown" }
+      - label: "Política de Privacidad (ES)"
+        name: "privacidad-es"
+        file: "src/content/legal/privacidad-es.md"
+        fields:
+          - { label: "Título", name: "title", widget: "string" }
+          - { label: "Contenido", name: "body", widget: "markdown" }
+      - label: "Política de Cookies (ES)"
+        name: "cookies-es"
+        file: "src/content/legal/cookies-es.md"
+        fields:
+          - { label: "Título", name: "title", widget: "string" }
+          - { label: "Contenido", name: "body", widget: "markdown" }

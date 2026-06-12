@@ -1,0 +1,613 @@
+---
+const { lang } = Astro.props;
+
+const copy = {
+  es: {
+    label: 'Contacto',
+    title: '¿Necesitas asesoramiento legal?',
+    text: 'Selecciona el tipo de asunto y déjanos tus datos. Te orientaremos hacia el profesional adecuado.',
+    step1: 'Asunto',
+    step2: 'Detalle',
+    step3: 'Datos',
+    summary: 'Resumen',
+    chooseArea: 'Elige el asunto',
+    chooseDetail: 'Elige el detalle',
+    detailsTitle: 'Tus datos',
+    back: 'Atrás',
+    send: 'Enviar consulta',
+    continue: 'Continuar',
+    name: 'Nombre completo',
+    email: 'Correo electrónico',
+    phone: 'Teléfono',
+    message: 'Comentario breve',
+    otherPlaceholder: 'Escribe brevemente tu caso',
+  },
+  en: {
+    label: 'Contact',
+    title: 'Do you need legal advice?',
+    text: 'Select the type of matter and leave us your details. We will direct your enquiry to the right professional.',
+    step1: 'Matter',
+    step2: 'Detail',
+    step3: 'Details',
+    summary: 'Summary',
+    chooseArea: 'Choose the matter',
+    chooseDetail: 'Choose the detail',
+    detailsTitle: 'Your details',
+    back: 'Back',
+    send: 'Send enquiry',
+    continue: 'Continue',
+    name: 'Full name',
+    email: 'Email address',
+    phone: 'Phone',
+    message: 'Brief comment',
+    otherPlaceholder: 'Briefly describe your case',
+  },
+  de: {
+    label: 'Kontakt',
+    title: 'Benötigen Sie rechtliche Beratung?',
+    text: 'Wählen Sie das Anliegen aus und hinterlassen Sie Ihre Daten.',
+    step1: 'Anliegen',
+    step2: 'Detail',
+    step3: 'Daten',
+    summary: 'Zusammenfassung',
+    chooseArea: 'Anliegen wählen',
+    chooseDetail: 'Detail wählen',
+    detailsTitle: 'Ihre Daten',
+    back: 'Zurück',
+    send: 'Anfrage senden',
+    continue: 'Weiter',
+    name: 'Vollständiger Name',
+    email: 'E-Mail-Adresse',
+    phone: 'Telefon',
+    message: 'Kurzer Kommentar',
+    otherPlaceholder: 'Beschreiben Sie kurz Ihren Fall',
+  },
+};
+
+const t = copy[lang] || copy.es;
+
+const icons = {
+  house: 'M3 11L12 4l9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9Z',
+  palm: 'M4 13c3-4 5-6 8-6s5 2 8 6M6 13h12v7H6v-7Z',
+  building: 'M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16M9 8h1M14 8h1M9 12h1M14 12h1M9 16h1M14 16h1M4 21h16',
+  scale: 'M12 3v18M5 7h14M7 7l-3 7h6L7 7Zm10 0l-3 7h6l-3-7Z',
+  court: 'M4 21h16M6 10h12M8 10v8M12 10v8M16 10v8M5 8l7-5 7 5H5Z',
+  health: 'M12 21s-7-4.35-7-10a4 4 0 0 1 7-2.65A4 4 0 0 1 19 11c0 5.65-7 10-7 10Z',
+  handshake: 'M8 12l2 2 4-4M4 13l4-4 4 4 4-4 4 4',
+  file: 'M8 4h6l4 4v12H8V4Zm6 0v5h5M10 13h6M10 17h6',
+  arrow: 'M5 12h14M13 6l6 6-6 6',
+};
+
+const matterGroups = [
+  {
+    id: 'inmobiliario',
+    icon: icons.house,
+    title: { es: 'Inmobiliario', en: 'Real estate', de: 'Immobilien' },
+    options: {
+      es: ['Compraventa', 'Arrendamiento', 'Comunidad', 'Obra', 'Otro'],
+      en: ['Purchase or sale', 'Lease', 'Community', 'Construction', 'Other'],
+      de: ['Kauf oder Verkauf', 'Miete', 'Gemeinschaft', 'Bau', 'Sonstiges'],
+    },
+  },
+  {
+    id: 'vivienda-vacacional',
+    icon: icons.palm,
+    title: { es: 'Vivienda vacacional', en: 'Holiday rentals', de: 'Ferienvermietung' },
+    options: {
+      es: ['Registro', 'Declaración responsable', 'Inspección o sanción', 'Contrato de gestión', 'Otro'],
+      en: ['Registration', 'Responsible declaration', 'Inspection or sanction', 'Management contract', 'Other'],
+      de: ['Registrierung', 'Erklärung', 'Inspektion oder Sanktion', 'Verwaltungsvertrag', 'Sonstiges'],
+    },
+  },
+  {
+    id: 'mercantil',
+    icon: icons.building,
+    title: { es: 'Mercantil', en: 'Corporate', de: 'Gesellschaftsrecht' },
+    options: {
+      es: ['Sociedad', 'Acuerdos', 'Participaciones', 'Responsabilidad', 'Otro'],
+      en: ['Company', 'Resolutions', 'Shares', 'Liability', 'Other'],
+      de: ['Gesellschaft', 'Beschlüsse', 'Anteile', 'Haftung', 'Sonstiges'],
+    },
+  },
+  {
+    id: 'litigios',
+    icon: icons.scale,
+    title: { es: 'Litigios', en: 'Litigation', de: 'Prozessrecht' },
+    options: {
+      es: ['Reclamación', 'Desahucio', 'Aseguradora', 'Recurso', 'Otro'],
+      en: ['Claim', 'Eviction', 'Insurance', 'Appeal', 'Other'],
+      de: ['Forderung', 'Räumung', 'Versicherung', 'Berufung', 'Sonstiges'],
+    },
+  },
+  {
+    id: 'administrativo',
+    icon: icons.court,
+    title: { es: 'Administrativo', en: 'Administrative', de: 'Verwaltung' },
+    options: {
+      es: ['Licencia', 'Recurso', 'Sanción', 'Trámite', 'Otro'],
+      en: ['Licence', 'Appeal', 'Sanction', 'Procedure', 'Other'],
+      de: ['Lizenz', 'Rechtsbehelf', 'Sanktion', 'Verfahren', 'Sonstiges'],
+    },
+  },
+  {
+    id: 'danos-personales',
+    icon: icons.health,
+    title: { es: 'Daños personales', en: 'Personal injury', de: 'Personenschäden' },
+    options: {
+      es: ['Accidente', 'Responsabilidad civil', 'Aseguradora', 'Otro'],
+      en: ['Accident', 'Civil liability', 'Insurance', 'Other'],
+      de: ['Unfall', 'Haftpflicht', 'Versicherung', 'Sonstiges'],
+    },
+  },
+  {
+    id: 'adr',
+    icon: icons.handshake,
+    title: { es: 'Extrajudicial', en: 'Out-of-court', de: 'Außergerichtlich' },
+    options: {
+      es: ['Negociación', 'Mediación', 'Reclamación previa', 'Otro'],
+      en: ['Negotiation', 'Mediation', 'Prior claim', 'Other'],
+      de: ['Verhandlung', 'Mediation', 'Vorherige Forderung', 'Sonstiges'],
+    },
+  },
+  {
+    id: 'otros',
+    icon: icons.file,
+    title: { es: 'Otro asunto', en: 'Other matter', de: 'Sonstiges' },
+    options: {
+      es: ['Herencia', 'Familia', 'Contrato', 'Penal', 'Otro'],
+      en: ['Inheritance', 'Family', 'Contract', 'Criminal', 'Other'],
+      de: ['Erbschaft', 'Familie', 'Vertrag', 'Strafrecht', 'Sonstiges'],
+    },
+  },
+];
+
+const matterData = matterGroups.map((group) => ({
+  id: group.id,
+  icon: group.icon,
+  detailIcon: icons.arrow,
+  title: group.title[lang],
+  options: group.options[lang],
+}));
+---
+
+<section class="bg-white text-ink py-section" id="contact-preview">
+  <div class="container-premium">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+      <div class="lg:col-span-4" data-animate>
+        <span class="section-label">{t.label}</span>
+
+        <h2 class="text-[clamp(2.7rem,4.4vw,5rem)] leading-[0.95] tracking-[-0.085em] mt-5 text-ink">
+          {t.title}
+        </h2>
+
+        <p class="mt-7 text-[16px] text-ink/60 leading-relaxed max-w-md">
+          {t.text}
+        </p>
+      </div>
+
+      <div class="lg:col-span-8 min-w-0" data-animate>
+        <form
+          name="legal-consultation"
+          method="POST"
+          data-netlify="true"
+          class="legal-form border-t border-black/10 pt-8 min-w-0"
+        >
+          <input type="hidden" name="form-name" value="legal-consultation" />
+          <input type="hidden" name="area" id="selected-area" />
+          <input type="hidden" name="detail" id="selected-detail" />
+
+          <div class="grid grid-cols-3 gap-4 mb-8">
+            <button type="button" class="step-tab active" data-step-button="1">
+              01. {t.step1}
+            </button>
+            <button type="button" class="step-tab" data-step-button="2">
+              02. {t.step2}
+            </button>
+            <button type="button" class="step-tab" data-step-button="3">
+              03. {t.step3}
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 min-w-0">
+            <div class="lg:col-span-8 min-w-0">
+              <div class="form-step active" data-step="1">
+                <h3 class="form-question">{t.chooseArea}</h3>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {matterData.map((matter) => (
+                    <button type="button" class="choice-btn" data-choice="area" data-id={matter.id} data-value={matter.title}>
+                      <span class="choice-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round">
+                          <path d={matter.icon}></path>
+                        </svg>
+                      </span>
+                      <span>{matter.title}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div class="form-step" data-step="2">
+                <h3 class="form-question">{t.chooseDetail}</h3>
+
+                <div id="detail-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+
+                <div id="other-detail-wrap" class="hidden mt-5">
+                  <textarea
+                    id="other-detail-input"
+                    class="form-input min-h-[120px] resize-y"
+                    placeholder={t.otherPlaceholder}
+                    maxlength="600"
+                  ></textarea>
+
+                  <button type="button" id="other-detail-continue" class="form-submit mt-5">
+                    {t.continue}
+                  </button>
+                </div>
+
+                <button type="button" class="form-back mt-7" data-back="1">
+                  ← {t.back}
+                </button>
+              </div>
+
+              <div class="form-step" data-step="3">
+                <h3 class="form-question">{t.detailsTitle}</h3>
+
+                <div class="grid grid-cols-1 gap-4">
+                  <input class="form-input" name="name" type="text" placeholder={t.name} required />
+                  <input class="form-input" name="email" type="email" placeholder={t.email} required />
+                  <input class="form-input" name="phone" type="tel" placeholder={t.phone} />
+                  <textarea class="form-input min-h-[110px] resize-y" name="message" placeholder={t.message} required></textarea>
+                </div>
+
+                <div class="mt-7 flex justify-between items-center gap-5">
+                  <button type="button" class="form-back" data-back="2">
+                    ← {t.back}
+                  </button>
+
+                  <button type="submit" class="form-submit">
+                    {t.send}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <aside class="lg:col-span-4 min-w-0">
+              <div class="summary-card border border-black/10 bg-[#FAFAFA] p-6 sticky top-28 min-w-0 overflow-hidden">
+                <p class="text-[11px] uppercase tracking-[0.28em] text-brand-500 mb-6">
+                  {t.summary}
+                </p>
+
+                <div class="space-y-6 min-w-0">
+                  <div class="min-w-0">
+                    <span class="block text-xs text-muted mb-1">{t.step1}</span>
+                    <strong id="summary-area" class="summary-value block text-xl font-normal tracking-[-0.05em] text-ink">
+                      —
+                    </strong>
+                  </div>
+
+                  <div class="min-w-0">
+                    <span class="block text-xs text-muted mb-1">{t.step2}</span>
+                    <strong id="summary-detail" class="summary-value block text-lg font-normal tracking-[-0.04em] text-ink">
+                      —
+                    </strong>
+                  </div>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .legal-form,
+  .legal-form *,
+  .summary-card,
+  .summary-card * {
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .legal-form .step-tab {
+    text-align: left;
+    border-bottom: 1px solid rgba(0,0,0,.15);
+    padding-bottom: 13px;
+    font-size: 12px;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: rgba(17,17,17,.34);
+    transition: all .3s ease;
+  }
+
+  .legal-form .step-tab.active {
+    color: #216287;
+    border-color: #216287;
+  }
+
+  .legal-form .step-tab.locked {
+    cursor: not-allowed;
+    opacity: .42;
+  }
+
+  .legal-form .form-step {
+    display: none;
+  }
+
+  .legal-form .form-step.active {
+    display: block;
+  }
+
+  .legal-form .form-question {
+    font-size: clamp(1.85rem, 3vw, 3rem);
+    line-height: 1;
+    letter-spacing: -0.07em;
+    margin-bottom: 1.5rem;
+    color: #111;
+  }
+
+  .legal-form .choice-btn,
+  .legal-form .detail-choice-btn {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    min-height: 66px;
+    text-align: left;
+    padding: 14px 16px;
+    border: 1px solid rgba(0,0,0,.12);
+    background: #fff;
+    color: rgba(17,17,17,.84);
+    font-size: 15px;
+    line-height: 1.25;
+    transition: all .3s ease;
+  }
+
+  .legal-form .choice-icon {
+    display: inline-flex;
+    width: 34px;
+    height: 34px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(33,98,135,.18);
+    border-radius: 999px;
+    color: #216287;
+    flex: none;
+  }
+
+  .legal-form .choice-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .legal-form .choice-btn:hover,
+  .legal-form .choice-btn.active,
+  .legal-form .detail-choice-btn:hover,
+  .legal-form .detail-choice-btn.active {
+    border-color: #216287;
+    background: rgba(33,98,135,.055);
+    color: #216287;
+    transform: translateY(-1px);
+  }
+
+  .legal-form .form-input {
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid rgba(0,0,0,.22);
+    background: transparent;
+    padding: 13px 0;
+    outline: none;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #111;
+    overflow-wrap: anywhere;
+  }
+
+  .legal-form .form-input::placeholder {
+    color: rgba(17,17,17,.42);
+  }
+
+  .legal-form .form-input:focus {
+    border-color: #216287;
+  }
+
+  .legal-form .form-submit {
+    padding: 13px 24px;
+    background: #216287;
+    color: white;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .18em;
+    transition: all .3s ease;
+  }
+
+  .legal-form .form-submit:hover {
+    background: #16425C;
+    transform: translateY(-1px);
+  }
+
+  .legal-form .form-back {
+    color: rgba(17,17,17,.48);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .18em;
+    transition: color .3s ease;
+  }
+
+  .legal-form .form-back:hover {
+    color: #111;
+  }
+
+  .summary-card {
+    max-width: 100%;
+  }
+
+  .summary-value {
+    max-width: 100%;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    overflow: hidden;
+  }
+
+  @media (max-width: 640px) {
+    .legal-form .step-tab {
+      font-size: 10px;
+      letter-spacing: .1em;
+    }
+
+    .summary-card {
+      position: static;
+    }
+  }
+</style>
+
+<script define:vars={{ matterData }}>
+  const form = document.querySelector('.legal-form');
+  const steps = form?.querySelectorAll('.form-step');
+  const tabs = form?.querySelectorAll('[data-step-button]');
+  const backButtons = form?.querySelectorAll('[data-back]');
+  const areaButtons = form?.querySelectorAll('[data-choice="area"]');
+
+  const detailOptions = form?.querySelector('#detail-options');
+  const otherDetailWrap = form?.querySelector('#other-detail-wrap');
+  const otherDetailInput = form?.querySelector('#other-detail-input');
+  const otherDetailContinue = form?.querySelector('#other-detail-continue');
+
+  const selectedArea = form?.querySelector('#selected-area');
+  const selectedDetail = form?.querySelector('#selected-detail');
+  const summaryArea = form?.querySelector('#summary-area');
+  const summaryDetail = form?.querySelector('#summary-detail');
+
+  let maxStepReached = 1;
+
+  function updateTabs() {
+    tabs?.forEach((tab) => {
+      const step = Number(tab.dataset.stepButton);
+      tab.classList.toggle('locked', step > maxStepReached);
+    });
+  }
+
+  function showStep(step) {
+    const targetStep = Number(step);
+    if (targetStep > maxStepReached) return;
+
+    steps?.forEach((item) => {
+      item.classList.toggle('active', item.dataset.step === String(targetStep));
+    });
+
+    tabs?.forEach((item) => {
+      item.classList.toggle('active', item.dataset.stepButton === String(targetStep));
+    });
+
+    updateTabs();
+  }
+
+  function goToStep(step) {
+    maxStepReached = Math.max(maxStepReached, Number(step));
+    showStep(step);
+  }
+
+  tabs?.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      showStep(tab.dataset.stepButton);
+    });
+  });
+
+  function renderDetailOptions(areaId) {
+    const area = matterData.find((item) => item.id === areaId);
+    if (!area || !detailOptions) return;
+
+    detailOptions.innerHTML = '';
+
+    area.options.forEach((option) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'detail-choice-btn';
+
+      button.innerHTML = `
+        <span class="choice-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round">
+            <path d="${area.detailIcon}"></path>
+          </svg>
+        </span>
+        <span>${option}</span>
+      `;
+
+      button.addEventListener('click', () => {
+        detailOptions.querySelectorAll('.detail-choice-btn').forEach((item) => {
+          item.classList.remove('active');
+        });
+
+        button.classList.add('active');
+
+        const isOther = ['Otro', 'Other', 'Sonstiges'].includes(option);
+
+        if (selectedDetail) selectedDetail.value = option;
+        if (summaryDetail) summaryDetail.textContent = option;
+
+        if (isOther) {
+          otherDetailWrap?.classList.remove('hidden');
+          otherDetailInput?.focus();
+        } else {
+          otherDetailWrap?.classList.add('hidden');
+          goToStep(3);
+        }
+      });
+
+      detailOptions.appendChild(button);
+    });
+  }
+
+  otherDetailContinue?.addEventListener('click', () => {
+  const value = otherDetailInput?.value.trim();
+  if (!value) return;
+
+  const otherLabel =
+    lang === 'es'
+      ? 'Otro'
+      : lang === 'en'
+      ? 'Other'
+      : 'Sonstiges';
+
+  /*
+    En el campo oculto se guarda el texto completo,
+    para que llegue en el formulario.
+    Pero en el resumen solo mostramos "Otro".
+  */
+  if (selectedDetail) selectedDetail.value = `${otherLabel}: ${value}`;
+  if (summaryDetail) summaryDetail.textContent = otherLabel;
+
+  goToStep(3);
+});
+
+  areaButtons?.forEach((button) => {
+    button.addEventListener('click', () => {
+      areaButtons.forEach((item) => item.classList.remove('active'));
+      button.classList.add('active');
+
+      const areaId = button.dataset.id;
+      const value = button.dataset.value;
+
+      if (selectedArea) selectedArea.value = value || '';
+      if (selectedDetail) selectedDetail.value = '';
+      if (summaryArea) summaryArea.textContent = value || '—';
+      if (summaryDetail) summaryDetail.textContent = '—';
+
+      otherDetailWrap?.classList.add('hidden');
+      if (otherDetailInput) otherDetailInput.value = '';
+
+      renderDetailOptions(areaId);
+      goToStep(2);
+    });
+  });
+
+  backButtons?.forEach((button) => {
+    button.addEventListener('click', () => {
+      showStep(button.dataset.back);
+    });
+  });
+
+  updateTabs();
+</script>

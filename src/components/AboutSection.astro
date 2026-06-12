@@ -1,0 +1,115 @@
+---
+import { useTranslations, getLocalePath } from '../i18n/translations';
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const intro = {
+  es: [
+    'Izquierdo y de la Cueva es un despacho con <strong>más de cuarenta años de experiencia</strong> en Lanzarote, situado en el centro de Arrecife y con una relación directa con clientes nacionales e internacionales.',
+    'Nuestra forma de trabajar combina <strong>atención personalizada</strong>, conocimiento del entorno local y capacidad para acompañar operaciones jurídicas de distinta complejidad.',
+  ],
+  en: [
+    'Izquierdo y de la Cueva is a law firm with <strong>over forty years of experience</strong> in Lanzarote, based in central Arrecife and used to working closely with national and international clients.',
+    'Our approach combines <strong>personal attention</strong>, local knowledge and the ability to support legal matters of different levels of complexity.',
+  ],
+  de: [
+    'Izquierdo y de la Cueva ist eine Kanzlei mit <strong>mehr als vierzig Jahren Erfahrung</strong> auf Lanzarote, mit Sitz im Zentrum von Arrecife und direkter Betreuung nationaler und internationaler Mandanten.',
+    'Unsere Arbeitsweise verbindet <strong>persönliche Beratung</strong>, lokale Marktkenntnis und die Fähigkeit, rechtliche Angelegenheiten unterschiedlicher Komplexität zu begleiten.',
+  ],
+};
+
+const pillars = [
+  {
+    number: '01',
+    title: {
+      es: 'Experiencia',
+      en: 'Experience',
+      de: 'Erfahrung',
+    },
+    text: {
+      es: 'Un equipo acostumbrado a resolver asuntos jurídicos con rigor, prudencia y visión práctica.',
+      en: 'A team used to handling legal matters with rigour, care and practical judgement.',
+      de: 'Ein Team, das Rechtsangelegenheiten mit Sorgfalt, Umsicht und Praxisnähe bearbeitet.',
+    },
+  },
+  {
+    number: '02',
+    title: {
+      es: 'Multilingüe',
+      en: 'Multilingual',
+      de: 'Mehrsprachig',
+    },
+    text: {
+      es: 'Atendemos en español, inglés y alemán, facilitando la comunicación con clientes extranjeros.',
+      en: 'We assist clients in Spanish, English and German, making communication easier for international clients.',
+      de: 'Wir betreuen Mandanten auf Spanisch, Englisch und Deutsch und erleichtern so die Kommunikation.',
+    },
+  },
+  {
+    number: '03',
+    title: {
+      es: 'Servicio integral',
+      en: 'Full-service approach',
+      de: 'Umfassende Betreuung',
+    },
+    text: {
+      es: 'Ofrecemos un servicio integral, ágil y profesional, adaptado a las necesidades reales de cada cliente.',
+      en: 'We provide an agile and professional full-service approach, adapted to the real needs of each client.',
+      de: 'Wir bieten eine umfassende, effiziente und professionelle Betreuung, angepasst an die konkreten Bedürfnisse jedes Mandanten.',
+    },
+  },
+];
+---
+
+<section class="bg-[#F3F9FD] text-ink py-section" id="about">
+  <div class="container-premium">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
+      <div class="lg:col-span-5" data-animate>
+        <span class="section-label">{t('about.label')}</span>
+
+        <h2 class="text-heading mt-6 max-w-xl text-brand-900">
+          {lang === 'es'
+            ? 'Más de 40 años de experiencia.'
+            : lang === 'en'
+            ? 'More than 40 years of experience.'
+            : 'Mehr als 40 Jahre Erfahrung.'}
+        </h2>
+
+        <div class="mt-8">
+          <a href={getLocalePath('/contactar/', lang)} class="btn-outline">
+            {t('hero.cta')}
+          </a>
+        </div>
+      </div>
+
+      <div class="lg:col-span-7" data-animate>
+        <div class="max-w-3xl text-xl md:text-2xl leading-relaxed tracking-[-0.035em] text-ink/80">
+          {intro[lang].map((paragraph) => (
+            <p class="mb-7" set:html={paragraph} />
+          ))}
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-12">
+          {pillars.map((pillar) => (
+            <article class="bg-white border border-black/10 p-8 md:p-9 min-h-[320px] flex flex-col justify-between">
+              <div>
+                <span class="block text-brand-500 text-sm tracking-[0.28em] uppercase mb-8">
+                  {pillar.number}
+                </span>
+
+                <h3 class="text-3xl tracking-[-0.055em] mb-5 text-ink">
+                  {pillar.title[lang]}
+                </h3>
+              </div>
+
+              <p class="text-muted text-[16px] leading-relaxed">
+                {pillar.text[lang]}
+              </p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
